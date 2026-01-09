@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFGE Local 2206 - Grievance Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&family=Great+Vibes&family=Courier+Prime&display=swap');
+        
+        body {
+            font-family: 'Lexend', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            background: radial-gradient(circle at top right, #0f172a, #020617);
+            background-attachment: fixed;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .active-nav-item {
+            border-left: 4px solid #f59e0b;
+            background: linear-gradient(to right, rgba(245, 158, 11, 0.2), transparent) !important;
+            color: #f59e0b !important;
+            font-weight: 800;
+        }
+
+        .visited-nav-item {
+            color: #94a3b8 !important;
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.05), transparent);
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.8); transform: scale(1.05); }
+        }
+        .play-btn-glow { animation: pulse-glow 3s infinite; }
+
+        @keyframes slide-up {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up { animation: slide-up 0.4s ease-out forwards; }
+
+        .chat-bubble-user {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(37, 99, 235, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 1.5rem 1.5rem 0 1.5rem;
+        }
+
+        .chat-bubble-ai {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.05));
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 1.5rem 1.5rem 1.5rem 0;
+        }
+
+        #master-play-btn { display: none; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .prose-content b, .prose-content strong { color: #f59e0b; font-weight: 800; }
+        .prose-content p { margin-bottom: 1.25rem; line-height: 1.7; font-size: 1rem; color: #cbd5e1; }
+        .prose-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+        .prose-content li { margin-bottom: 0.5rem; color: #94a3b8; }
+        .prose-content h3 { color: #f59e0b; font-weight: 800; margin-top: 1.5rem; margin-bottom: 0.75rem; text-transform: uppercase; font-size: 0.85rem; border-bottom: 1px solid rgba(245, 158, 11, 0.2); padding-bottom: 4px; }
+        
+        .doc-snippet {
+            font-family: 'Courier Prime', monospace;
+            background: #ffffff;
+            color: #1e293b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border-left: 6px solid #f59e0b;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 1.5rem 0;
+        }
+
+        .history-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+        }
+        .history-card:hover {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.4);
+            transform: translateX(4px);
+        }
+
+        #report-paper {
+            background: white;
+            color: #1e293b;
+            padding: 40px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.6);
+            border: 1px solid #e2e8f0;
+        }
+
+        #certificate-paper {
+            background: white;
+            color: #1e293b;
+            padding: 60px;
+            border: 15px double #f59e0b;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm66-3c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-40-39c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm0-24c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM3 40c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm39 25c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm54-14c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM46 25c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm15-15c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm0 75c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm10-56c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-56 6c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm41 11c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm54 14c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-8-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-86-14c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm19 0c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-11 28c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm60-28c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm14 7c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23f59e0b' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .illustration-bg {
+            background: linear-gradient(45deg, #0f172a, #1e293b);
+            border-radius: 1.5rem;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            min-height: 250px;
+        }
+
+        .card-glow:hover {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #f59e0b;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden text-slate-200">
+
+    <!-- Header -->
+    <header class="h-auto py-3 lg:h-16 flex flex-col lg:flex-row items-center justify-between px-4 lg:px-6 glass-panel border-b border-white/5 z-50 sticky top-0">
+        <div class="flex items-center justify-between w-full lg:w-auto mb-3 lg:mb-0">
+            <div class="flex items-center gap-3">
+                <div class="bg-amber-500 p-2 rounded-lg shadow-lg">
+                    <i class="fa-solid fa-building-columns text-slate-950 text-base"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm lg:text-lg font-extrabold tracking-tight uppercase text-white">AFGE Local 2206 <span class="text-amber-500">Academy</span></h1>
+                    <div class="hidden sm:flex items-center gap-2">
+                        <div class="h-1 w-16 lg:w-24 bg-slate-800 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="h-full bg-amber-500 transition-all duration-1000" style="width: 0%;"></div>
+                        </div>
+                        <span id="progress-text" class="text-[8px] uppercase font-bold text-slate-500 tracking-widest text-center">Course Initiation</span>
+                    </div>
+                </div>
+            </div>
+            <button onclick="window.toggleMobileSidebar(true)" class="lg:hidden p-2 text-slate-400 hover:text-white">
+                <i class="fa-solid fa-bars-staggered text-xl"></i>
+            </button>
+        </div>
+        
+        <div class="flex items-center overflow-x-auto w-full lg:w-auto no-scrollbar">
+            <nav class="flex gap-1 bg-slate-900/50 p-1 rounded-xl border border-white/5 mx-auto lg:mx-0 min-w-max">
+                <button onclick="window.switchMode('academy')" id="mode-academy" class="px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-lg">TRAINING</button>
+                <button onclick="window.switchMode('field-kit')" id="mode-field-kit" class="px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all text-slate-400 hover:text-white">FIELD KIT</button>
+                <button onclick="window.switchMode('ai-guide')" id="mode-ai-guide" class="px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all text-slate-400 hover:text-white">AI GUIDE</button>
+                <button onclick="window.switchMode('resources')" id="mode-resources" class="px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all text-slate-400 hover:text-white">RESOURCES</button>
+                <button onclick="window.switchMode('setup')" id="mode-setup" class="px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-key mr-1"></i>SETUP
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="flex flex-1 relative overflow-hidden">
+        <!-- Sidebar -->
+        <div id="mobile-sidebar-overlay" onclick="window.toggleMobileSidebar(false)" class="fixed inset-0 bg-black/60 z-[60] lg:hidden opacity-0 pointer-events-none"></div>
+        <aside id="mobile-sidebar" class="fixed inset-y-0 left-0 w-64 glass-panel z-[70] lg:relative lg:w-72 border-r border-white/5 overflow-y-auto custom-scroll flex flex-col -translate-x-full lg:translate-x-0">
+            <div class="p-6 flex-1 text-slate-300">
+                <div class="flex justify-between items-center mb-6 lg:hidden">
+                    <h2 class="text-[10px] font-black text-amber-500 uppercase tracking-widest">Syllabus</h2>
+                    <button onclick="window.toggleMobileSidebar(false)" class="text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                
+                <div class="hidden lg:block text-center mb-8 border-b border-white/5 pb-4">
+                    <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Course Curriculum</h2>
+                    <p class="text-[11px] font-bold text-amber-500 uppercase tracking-tighter italic font-serif">Grievance Mastery: From Incident to Arbitration</p>
+                </div>
+
+                <div class="space-y-8">
+                    <section>
+                        <h3 class="text-[10px] font-bold text-blue-400 uppercase mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved"></i> Week 1: Foundations
+                        </h3>
+                        <div id="nav-week-1" class="space-y-1"></div>
+                    </section>
+                    <section>
+                        <h3 class="text-[10px] font-bold text-amber-400 uppercase mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-gavel"></i> Week 2: Advanced
+                        </h3>
+                        <div id="nav-week-2" class="space-y-1"></div>
+                    </section>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-scroll-container" class="flex-1 overflow-y-auto overflow-x-hidden bg-transparent p-3 lg:p-6 relative custom-scroll pb-24 text-slate-200">
+            
+            <!-- Academy View -->
+            <div id="academy-view" class="flex flex-col gap-4 lg:gap-6 animate-slide-up max-w-7xl mx-auto w-full">
+                <div id="video-canvas" class="relative rounded-2xl lg:rounded-[2.5rem] overflow-hidden glass-panel border border-white/10 shadow-2xl flex flex-col group min-h-[450px] lg:min-h-[650px]">
+                    <div id="visual-frame" class="flex-1 relative flex items-center justify-center bg-slate-950 overflow-hidden p-4">
+                        <div id="image-container" class="w-full h-full flex items-center justify-center illustration-bg rounded-2xl overflow-hidden border border-white/5">
+                            <!-- Welcome Screen content populated by script -->
+                        </div>
+                    </div>
+
+                    <div class="min-h-[16rem] lg:min-h-[28rem] h-auto bg-slate-900/90 border-t border-white/5 p-6 lg:p-12 flex flex-col items-center overflow-y-auto custom-scroll text-white text-white">
+                        <div id="script-header" class="text-[8px] lg:text-[10px] font-bold text-amber-500 uppercase mb-4 tracking-[0.3em] border-b border-amber-500/20 pb-1 w-full text-center uppercase text-white font-bold">Instructor address: Full Academic Training Material</div>
+                        <div id="live-transcript-container" class="prose-content max-w-5xl">
+                             <div id="live-transcript" class="text-sm lg:text-base font-medium text-slate-300 text-center leading-relaxed whitespace-pre-line">
+                                Welcome, Representative. Select a syllabus day and press Play to begin your professional training lecture.
+                             </div>
+                        </div>
+                        <div class="mt-8 flex flex-wrap justify-center gap-3">
+                            <button id="summary-btn" onclick="window.generateSummary()" class="text-[9px] lg:text-[10px] font-bold bg-blue-500/10 border border-blue-500/20 px-6 lg:px-8 py-2.5 rounded-full text-blue-400 hover:bg-blue-500/20 transition-all hidden uppercase tracking-widest">
+                                <i class="fa-solid fa-list-check mr-2"></i>  Get Tactical Cheat Sheet
+                            </button>
+                            <button id="scenario-btn" onclick="window.generatePracticeScenario()" class="text-[9px] lg:text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 px-6 lg:px-8 py-2.5 rounded-full text-amber-500 hover:bg-amber-500/20 transition-all hidden uppercase tracking-widest">
+                                <i class="fa-solid fa-brain mr-2"></i>  Generate AI Case Challenge
+                            </button>
+                            <button id="claim-cert-btn" onclick="window.switchMode('certificate')" class="text-[9px] lg:text-[10px] font-bold bg-green-500/10 border border-green-500/20 px-6 lg:px-8 py-2.5 rounded-full text-green-500 hover:bg-green-500/20 transition-all hidden uppercase tracking-widest animate-pulse"> Claim Your Certificate</button>
+                        </div>
+                    </div>
+
+                    <div class="absolute bottom-[420px] lg:bottom-[480px] right-4 lg:right-10 z-40">
+                        <button id="master-play-btn" onclick="window.playCurrentLesson()" class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-amber-500 text-slate-950 text-2xl lg:text-4xl flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all play-btn-glow border-4 border-slate-900">
+                            <i class="fa-solid fa-play ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                    <!-- MAIN ACTIVITY PANEL -->
+                    <div id="activity-panel" class="glass-panel rounded-2xl lg:rounded-3xl p-5 lg:p-8 border-l-4 border-amber-500/50 flex flex-col card-glow min-h-[300px]">
+                        <div id="activity-content-container">
+                            <h4 class="text-[10px] font-black text-amber-400 uppercase tracking-widest mb-3 lg:mb-4 flex items-center gap-2 text-white font-bold text-white">
+                                <i class="fa-solid fa-pen-nib"></i> Independent Task
+                            </h4>
+                            <div id="hands-on-activity" class="text-xs lg:text-sm leading-relaxed space-y-4 flex-1 prose-content text-slate-300 text-white">
+                                Selection pending...
+                            </div>
+                        </div>
+
+                        <!-- AI CHALLENGE VIEW -->
+                        <div id="ai-challenge-container" class="mt-2 hidden animate-slide-up">
+                            <div class="flex items-center justify-between mb-3 text-white border-b border-amber-500/20 pb-2">
+                                <h5 class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em]"> Active Case Challenge</h5>
+                                <div class="flex gap-4">
+                                    <button onclick="window.generatePracticeScenario(true)" class="text-[8px] font-black uppercase text-amber-400 hover:text-white transition-all underline">Refresh Case</button>
+                                    <button onclick="window.restoreActivityUI()" class="text-[8px] font-black uppercase text-slate-500 hover:text-white transition-all underline">Back to Task</button>
+                                </div>
+                            </div>
+                            <div id="ai-challenge-box" class="p-4 bg-amber-500/5 border border-amber-500/10 rounded-xl text-[11px] lg:text-xs text-amber-100/90 leading-relaxed prose-content text-white"></div>
+                        </div>
+
+                        <!-- FEEDBACK AREA -->
+                        <div id="ai-feedback-container" class="mt-6 pt-4 border-t border-white/10 hidden animate-slide-up text-white">
+                            <div class="flex items-center gap-2 mb-3 text-white font-bold">
+                                <div class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+                                <h5 class="text-[10px] font-black text-amber-500 uppercase tracking-[0.2em]">Chief Steward's Critique</h5>
+                            </div>
+                            <div id="ai-feedback-box" class="p-5 bg-amber-500/5 border border-amber-500/20 rounded-xl text-xs text-amber-100 leading-relaxed italic prose-content text-white"></div>
+                            <button onclick="window.clearFeedback()" class="mt-3 text-[8px] font-black uppercase text-slate-500 hover:text-white transition-all underline tracking-widest text-white">Dismiss Feedback</button>
+                        </div>
+
+                        <!-- INPUT AREA -->
+                        <div id="peer-review-section" class="mt-6 pt-6 border-t border-white/10 hidden">
+                            <textarea id="activity-input" class="w-full bg-slate-900 border border-white/10 rounded-xl p-4 text-[11px] lg:text-xs text-slate-300 focus:outline-none focus:border-amber-500 mb-3" placeholder="Draft your answer here for AI feedback..."></textarea>
+                            <button onclick="window.getAIFeedback()" id="review-btn" class="w-full py-3 bg-slate-800 text-amber-500 font-bold rounded-xl text-[10px] uppercase tracking-[0.2em] hover:bg-slate-700 transition-all border border-amber-500/20 shadow-lg shadow-amber-500/5 text-white font-bold">
+                                Get AI Chief Steward Feedback
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- NEW: CHALLENGE LOG BOX -->
+                    <div class="flex flex-col gap-4 lg:gap-6">
+                        <div class="glass-panel rounded-2xl lg:rounded-3xl p-5 lg:p-8 border-l-4 border-blue-500/50 card-glow flex-1">
+                            <h4 class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-3 lg:mb-4 flex items-center gap-2 text-white font-bold">
+                                <i class="fa-solid fa-box-archive"></i> Last Case Review
+                            </h4>
+                            <div id="challenge-log-box" class="text-xs lg:text-sm leading-relaxed text-slate-400 italic prose-content max-h-[300px] overflow-y-auto custom-scroll">
+                                No recently generated cases.
+                            </div>
+                        </div>
+
+                        <div class="glass-panel rounded-2xl lg:rounded-3xl p-5 lg:p-8 border-l-4 border-slate-500/50 card-glow">
+                             <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 lg:mb-4 flex items-center gap-2 text-white font-bold">
+                                <i class="fa-solid fa-lightbulb"></i> Strategic Tip
+                            </h4>
+                            <div id="steward-instruction" class="text-xs lg:text-sm leading-relaxed space-y-4 prose-content text-slate-300">
+                                Selection pending...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Field Kit View -->
+            <div id="field-kit-view" class="hidden flex flex-col gap-6 animate-slide-up max-w-7xl mx-auto w-full text-white">
+                <div class="mb-4 lg:mb-8 text-center lg:text-left flex flex-col sm:flex-row justify-between items-end gap-4">
+                    <div>
+                        <h2 class="text-3xl lg:text-4xl font-black text-white">Representative's <span class="text-amber-500">Field Kit</span></h2>
+                        <p class="text-slate-400 mt-2 text-sm">Strategic tools for incident analysis and grievance drafting.</p>
+                    </div>
+                    <button onclick="window.switchMode('academy')" class="px-6 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase border border-white/10 hover:border-amber-500/40 transition-all">
+                        <i class="fa-solid fa-graduation-cap mr-2"></i> Return to Training
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pb-20 text-slate-200">
+                    <div class="lg:col-span-2 glass-panel p-6 lg:p-8 rounded-2xl border border-white/10 space-y-6">
+                        <div class="flex justify-between items-center text-white font-bold">
+                            <h3 class="text-xs font-black uppercase text-amber-500 tracking-widest">Incident Analysis Workspace</h3>
+                            <button onclick="window.resetFieldKit()" class="text-[9px] font-black uppercase bg-slate-800 px-3 py-1.5 rounded-lg border border-white/10 hover:bg-red-500/20 transition-all">
+                                <i class="fa-solid fa-rotate-left mr-1"></i> Reset Workspace
+                            </button>
+                        </div>
+                        <textarea id="grievance-input" class="w-full h-48 bg-slate-900/50 border border-white/10 rounded-xl p-4 text-xs lg:text-sm focus:border-amber-500 outline-none text-white" placeholder="Describe the management action in full detail..."></textarea>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-white">
+                            <button onclick="window.generateGrievanceHelp()" id="case-analyze-btn" class="py-3 bg-amber-500 text-slate-950 font-bold rounded-xl text-[10px] uppercase tracking-widest transition-all text-slate-900 font-bold"> Analyze Case</button>
+                            <button onclick="window.generateFullReport()" id="case-report-btn" class="py-3 bg-blue-600 text-white font-bold rounded-xl text-[10px] uppercase tracking-widest hover:bg-blue-500 transition-all font-bold shadow-lg">
+                                Generate Strategic Case Report
+                            </button>
+                            <button onclick="window.generateRebuttals()" id="case-rebuttal-btn" class="sm:col-span-2 py-4 bg-slate-800 text-white border border-amber-500/30 font-black rounded-xl text-[10px] uppercase tracking-widest hover:bg-slate-700 transition-all font-bold">
+                                Generate Tactical Rebuttals
+                            </button>
+                        </div>
+                        <div id="grievance-output" class="hidden p-5 bg-slate-950/80 border border-white/10 rounded-xl text-xs text-slate-300 overflow-y-auto max-h-[500px] custom-scroll prose-content text-white"></div>
+                    </div>
+                    <div class="space-y-6 text-white text-white text-white">
+                        <div class="glass-panel p-6 rounded-2xl border border-white/10 flex flex-col h-full max-h-[800px]">
+                            <h3 class="text-xs font-black uppercase text-blue-400 mb-4 tracking-widest border-b border-white/10 pb-2 flex items-center gap-2 font-bold">
+                                <i class="fa-solid fa-clock-rotate-left"></i> History (Last 20)
+                            </h3>
+                            <div id="history-list" class="flex-1 overflow-y-auto space-y-3 custom-scroll pr-2 text-white text-xs"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Guide View -->
+            <div id="ai-guide-view" class="hidden flex flex-col gap-6 animate-slide-up max-w-7xl mx-auto w-full text-white text-white text-white">
+                <div class="mb-4 lg:mb-8 text-center lg:text-left flex flex-col sm:flex-row justify-between items-end gap-4 text-white">
+                    <div>
+                        <h2 class="text-3xl lg:text-4xl font-black text-white">AI <span class="text-blue-500">Steward Suite</span></h2>
+                        <p class="text-slate-400 mt-2 text-sm text-center lg:text-left">Strategic consultation and Roleplay Simulation.</p>
+                    </div>
+                    <button onclick="window.switchMode('academy')" class="px-6 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase border border-white/10 hover:border-amber-500/40 transition-all">
+                        <i class="fa-solid fa-graduation-cap mr-2"></i> Return to Training
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[700px] text-slate-200">
+                    <div class="glass-panel rounded-3xl border border-white/10 flex flex-col overflow-hidden text-white">
+                        <div class="p-4 border-b border-white/10 bg-slate-900/50 uppercase text-[10px] font-black tracking-widest text-blue-400 font-bold">Options</div>
+                        <div class="p-4 space-y-3">
+                             <button onclick="window.setChatMode('consult')" id="mode-consult" class="w-full text-left p-3 rounded-xl bg-blue-500/20 text-blue-300 font-bold text-xs uppercase border border-blue-500/30">Consultation</button>
+                             <button onclick="window.setChatMode('roleplay')" id="mode-roleplay" class="w-full text-left p-3 rounded-xl bg-slate-800 text-slate-400 font-bold text-xs uppercase border border-transparent">Roleplay Sim</button>
+                        </div>
+                        <div id="chat-history-list" class="flex-1 overflow-y-auto p-4 space-y-2 custom-scroll text-white"></div>
+                        <button onclick="window.clearChat()" class="p-4 text-[8px] font-black uppercase text-slate-500 hover:text-red-400 transition-all border-t border-white/5 text-white">Clear Session</button>
+                    </div>
+                    <div class="lg:col-span-3 flex flex-col glass-panel rounded-3xl border border-white/10 overflow-hidden relative shadow-2xl text-white">
+                        <div class="flex-1 p-6 overflow-y-auto custom-scroll space-y-6 text-white" id="chat-messages"></div>
+                        <div class="p-4 bg-slate-900/80 border-t border-white/10 flex gap-3 text-white">
+                            <input type="text" id="chat-input" onkeypress="if(event.key==='Enter') window.sendChatMessage()" class="flex-1 bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-xs lg:text-sm text-white focus:outline-none focus:border-blue-500 shadow-inner" placeholder="Ask AI Steward a question...">
+                            <button id="chat-send-btn" onclick="window.sendChatMessage()" class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-paper-plane text-xl"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Setup View -->
+            <div id="setup-view" class="hidden flex flex-col gap-6 animate-slide-up max-w-4xl mx-auto w-full p-4 text-white text-center text-white">
+                <h2 class="text-3xl lg:text-4xl font-black text-white text-center text-white">AI <span class="text-amber-500 text-white font-bold">Configuration</span></h2>
+                <div class="glass-panel p-8 rounded-[2rem] border border-blue-500/20 flex flex-col gap-6 text-left text-white">
+                    <div class="space-y-6">
+                        <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-2">Database Persistence</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                This course is anchored to a unique, permanent identifier. Your progress and API keys are stored securely in a dedicated cloud bucket. This ensures this specific course remains functional regardless of your other projects.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-4">Step-by-Step Activation Guide</h3>
+                            <ol class="space-y-4 text-xs lg:text-sm text-slate-300">
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">1</span>
+                                    <div>Visit the <strong><a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 underline hover:text-blue-300">Google AI Studio API Key Manager</a></strong>.</div>
+                                </li>
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">2</span>
+                                    <div>Click "Create API key in new project" (or use an existing one) and copy the generated string.</div>
+                                </li>
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">3</span>
+                                    <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>. Your key will be synced to your cloud profile.</div>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="pt-6 border-t border-white/5 text-white">
+                        <input type="password" id="user-api-key" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-amber-500 outline-none text-white text-white" placeholder="Paste Gemini API Key here...">
+                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900 shadow-lg hover:scale-[1.02] transition-transform">Save Configuration & Sync</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources Hub View -->
+            <div id="resources-view" class="hidden flex flex-col animate-slide-up max-w-7xl mx-auto w-full px-4 text-white">
+                <div class="mb-8 text-center lg:text-left">
+                    <h2 class="text-3xl lg:text-4xl font-black text-white">Representative <span class="text-amber-500">Resource Hub</span></h2>
+                    <p class="text-slate-400 mt-2 text-sm text-center lg:text-left">Strategic links to federal labor authorities, personnel manuals, and case law databases.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-20 text-slate-200" id="resource-links-grid">
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-4 flex flex-col text-white">
+                        <div class="flex items-center gap-3 text-white font-bold"><div class="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center text-amber-500"><i class="fa-solid fa-file-contract"></i></div><h3 class="uppercase text-xs text-white">National Contract</h3></div>
+                        <div class="space-y-2 flex flex-col text-white">
+                            <a href="https://www.afge.org/globalassets/documents/ssa/master-agreement/2024-ssa-afge-master-agreement.pdf" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-amber-500/10 transition-all text-blue-400 underline font-bold">2024 Master Agreement (Full PDF)</a>
+                            <a href="https://www.afge.org/councils/ssa-general-council-220/" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-amber-500/10 transition-all text-white font-bold">AFGE Council 220 Portal</a>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-4 flex flex-col text-white">
+                        <div class="flex items-center gap-3 text-white font-bold"><div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center text-blue-400"><i class="fa-solid fa-scale-balanced"></i></div><h3 class="uppercase text-xs text-white">Statutes</h3></div>
+                        <div class="space-y-2 flex flex-col text-white">
+                            <a href="https://www.flra.gov/statute" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-blue-500/10 transition-all text-blue-400 underline font-bold">5 U.S.C. Chapter 71 (Statute)</a>
+                            <a href="https://www.law.cornell.edu/uscode/text/5/5596" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-blue-500/10 transition-all text-white font-bold">The Back Pay Act (5 U.S.C. 5596)</a>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border border-white/10 space-y-4 flex flex-col text-white">
+                        <div class="flex items-center gap-3 text-white font-bold"><div class="w-10 h-10 bg-slate-500/20 rounded-lg flex items-center justify-center text-slate-300"><i class="fa-solid fa-magnifying-glass"></i></div><h3 class="uppercase text-xs text-white">Case Search</h3></div>
+                        <div class="space-y-2 flex flex-col text-white text-xs">
+                             <a href="https://www.flra.gov/decisions" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-slate-500/10 transition-all text-white font-bold text-white">FLRA Decisions search</a>
+                             <a href="https://www.mspb.gov/decisions/decisions.htm" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-slate-500/10 transition-all text-white font-bold text-white">MSPB Decisions</a>
+                             <a href="https://www.eeoc.gov/decisions" target="_blank" class="p-3 bg-slate-900/50 rounded-xl hover:bg-slate-500/10 transition-all text-white font-bold text-white">EEOC Federal Decisions</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Display -->
+            <div id="report-display-view" class="hidden flex flex-col items-center animate-slide-up max-w-5xl mx-auto w-full p-4 pb-24 text-slate-900 text-white">
+                <div id="report-controls" class="w-full mb-6 flex justify-between items-center glass-panel p-4 rounded-2xl border-white/10 text-white">
+                    <div class="flex gap-2">
+                        <button onclick="window.switchMode('academy')" class="text-xs font-bold text-slate-400 hover:text-white transition-all text-white"><i class="fa-solid fa-graduation-cap mr-2"></i> Academy</button>
+                        <button onclick="window.switchMode('field-kit')" class="text-xs font-bold text-slate-400 hover:text-white transition-all border-l border-white/10 pl-2"><i class="fa-solid fa-toolbox mr-2"></i> Field Kit</button>
+                    </div>
+                    <button onclick="window.print()" class="px-6 py-2 bg-amber-500 text-slate-950 font-black rounded-xl text-[10px] uppercase tracking-widest hover:bg-amber-400 transition-all text-slate-900 font-bold">Print Case Strategy</button>
+                </div>
+                <div id="report-paper" class="w-full bg-white p-12 lg:p-20 rounded-sm shadow-2xl prose-content border border-slate-200 text-slate-900 text-white">
+                    <div id="report-content" class="text-sm leading-relaxed space-y-8 text-slate-900 text-white"></div>
+                </div>
+            </div>
+
+            <!-- Certificate View -->
+            <div id="certificate-view" class="hidden flex flex-col items-center p-10 pb-24 text-slate-900 text-white">
+                <div id="certificate-paper" class="w-full aspect-[1.414/1] flex flex-col items-center justify-center text-center bg-white border-[20px] border-amber-500/10 text-slate-900 shadow-2xl rounded-sm">
+                    <h1 class="text-3xl font-black mb-2 uppercase text-slate-900">AFGE LOCAL 2206</h1>
+                    <h2 class="text-5xl font-serif text-amber-600 mb-8 text-slate-900">Certificate of Completion</h2>
+                    <span id="cert-display-name" class="text-5xl signature-font border-b-2 border-slate-300 px-10 text-slate-900">Your Name Here</span>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js" type="module"></script>
+    <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js" type="module"></script>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+        // --- GLOBAL STATE ---
+        let activeCustomKey = "";
+        let activeIndexState = -1;
+        let localScenarioCache = {};
+        let localCaseHistory = [];
+        let visitedLessons = new Set();
+        let currentChatMode = "consult";
+        let user = null;
+
+        // PERMANENT UNIQUE IDENTIFIER (Defined only once here)
+        const COURSE_ID = "grievance-mastery-afge-2206-permanent-v1";
+
+        // --- FIREBASE VARS ---
+        const firebaseConfigRaw = JSON.parse(__firebase_config);
+        const appInstance = initializeApp(firebaseConfigRaw);
+        const auth = getAuth(appInstance);
+        const db = getFirestore(appInstance);
+
+        // --- DATA DEFS ---
+        const staticVisuals = {
+            1: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="50" y="50" width="300" height="200" fill="white" rx="10" opacity="0.05"/><path d="M100 150 L200 80 L300 150 L200 220 Z" fill="#f59e0b" opacity="0.6"/><circle cx="200" cy="150" r="40" fill="none" stroke="#f59e0b" stroke-width="2"/><text x="200" y="270" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="18">STRATEGIC ROADMAP</text><path d="M190 150 H210 M200 140 V160" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>`,
+            2: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><circle cx="180" cy="130" r="70" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="8 4"/><path d="M230 180 L290 240" stroke="#3b82f6" stroke-width="12" stroke-linecap="round"/><rect x="150" y="100" width="60" height="60" fill="white" opacity="0.1"/><text x="200" y="280" text-anchor="middle" fill="#3b82f6" font-weight="bold" font-size="18">EVIDENCE INVESTIGATION</text></svg>`,
+            3: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M200 50 L100 100 V180 C100 230 200 270 200 270 C200 270 300 230 300 180 V100 L200 50Z" fill="#f59e0b" opacity="0.7"/><path d="M170 160 L195 185 L240 135" stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="200" y="295" text-anchor="middle" fill="white" font-size="14">THE WEINGARTEN SHIELD</text></svg>`,
+            4: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="120" y="40" width="160" height="220" fill="white" rx="5" opacity="0.8"/><rect x="140" y="70" width="120" height="8" fill="#e2e8f0"/><rect x="140" y="100" width="120" height="8" fill="#e2e8f0"/><rect x="140" y="130" width="80" height="8" fill="#f59e0b"/><path d="M260 210 L210 260 L190 250 L240 200 Z" fill="#475569"/><text x="200" y="290" text-anchor="middle" fill="white" font-size="16">GRIEVANCE DRAFTING</text></svg>`,
+            5: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><circle cx="150" cy="150" r="50" fill="#3b82f6" opacity="0.6"/><circle cx="250" cy="150" r="50" fill="#f59e0b" opacity="0.6"/><path d="M150 150 H250" stroke="white" stroke-width="2" stroke-dasharray="5 5"/><text x="200" y="270" text-anchor="middle" fill="white" font-weight="bold" font-size="20">LEGAL EQUALITY</text></svg>`,
+            6: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="100" y="80" width="200" height="120" rx="10" fill="none" stroke="white" stroke-width="4"/><path d="M120 110 H280 M120 140 H280 M120 170 H200" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><text x="200" y="260" text-anchor="middle" fill="white" font-size="18">7114 DATA REQUEST</text></svg>`,
+            7: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M80 220 H320 L280 260 H120 Z" fill="#475569"/><rect x="185" y="100" width="30" height="120" fill="#f59e0b"/><rect x="140" y="80" width="120" height="40" rx="8" fill="#f59e0b"/><text x="200" y="50" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="20">ARBITRATION PANEL</text></svg>`,
+            8: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="120" y="50" width="160" height="220" rx="10" fill="#3b82f6"/><rect x="105" y="70" width="30" height="40" rx="5" fill="#f59e0b"/><rect x="105" y="130" width="30" height="40" rx="5" fill="#f59e0b"/><rect x="105" y="190" width="30" height="40" rx="5" fill="#f59e0b"/><text x="200" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="24">THE BINDER</text></svg>`,
+            9: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="60" y="80" width="280" height="140" rx="20" fill="none" stroke="#f59e0b" stroke-width="5"/><path d="M100 120 H300 M100 150 H300 M100 180 H200" stroke="#f59e0b" stroke-width="3"/><text x="200" y="270" text-anchor="middle" fill="white" font-size="20">IRAC LOGIC MAP</text></svg>`,
+            10: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M200 60 L320 130 L200 200 L80 130 Z" fill="#f59e0b"/><path d="M320 130 V200" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><rect x="180" y="200" width="40" height="60" fill="#3b82f6"/><text x="200" y="45" text-anchor="middle" fill="white" font-weight="bold" font-size="24">CERTIFIED STEWARD</text></svg>`
+        };
+
+        const lessons = [
+            { id: 1, title: "Day 1: Roadmap (Union 101)", script: `Welcome to Day 1. You are an Officer of the Union. Your power is anchored in **5 U.S.C. Chapter 71**, known as the Statute. Collective bargaining is in the public interest. Under **Section 7131**, you have a right to **Official Time**—this is a federal entitlement. The **AFGE SSA National Contract** is the "Supreme Law of the Shop." Management policy cannot override it. Focus on **Article 1 (Recognition)**, **Article 3 (Union Rights)**, and **Duty of Fair Representation (DFR)**. Literacy is defense.`, instruction: "The Contract is superior to internal Agency manuals. Master Article 1 and 3 immediately.", activity: "INDEPENDENT TASK: Open the National Contract. 1. Find the Signature Page. 2. Locate Article 31, Section 3. 3. Locate Article 4, Section 1.", icon: "fa-map-marked-alt" },
+            { id: 2, title: "Day 2: Investigation (Detective)", script: `Evidence wins grievances. Under **5 U.S.C. § 7103(a)(9)**, a grievance is a complaint relating to employment. You need a **Contractual Hook**. Master the **15-Day Hard Wall** in **Article 24, Section 7**. Initiate within 15 working days or lose the case. Management tactics: "talking it out" until Day 16. Strategy: **5 W's**, **Documentary preservation**, and identifying **Disparate Treatment**. If it's not in writing, it didn't happen.`, instruction: "Stress that Article 24 timelines are jurisdictional.", activity: "INDEPENDENT TASK: Categorize workplace scenarios. Cite Article numbers.", icon: "fa-search" },
+            { id: 3, title: "Day 3: Intake (Listening)", script: `Today, you become the Shield. Master **Weingarten Rights (Article 4, Section 2)**. Codified at **7114(a)(2)(B)**. Weingarten is **NOT** automatic. Three-Prong Test: 1. Investigatory meeting? 2. Reasonable Belief? 3. Request made? You have the right to clarify questions, caucus, and advise. If a meeting is "instructional" but management asks "Why?", it is an investigation. Stop it immediately.`, instruction: "Recognize the difference between 'Instruction' and 'Investigation'.", activity: "INDEPENDENT TASK: Write out the Weingarten invocation script. List 3 signs meeting has become investigative.", icon: "fa-shield-halved" },
+            { id: 4, title: "Day 4: Drafting (Secret Wording)", script: `Drafting is legal pleading. Tactical Strategy: The **Global Clause**. Conclude with: "Management violated Article [X], Section [Y], **and any and all other relevant Articles, Laws, or Regulations.**" Remedy - **Made Whole**. Use the **Back Pay Act (5 U.S.C. 5596)**. To win back pay, prove: 1. Unjustified action, 2. Pay withdrawal, 3. "But for" the action, they'd have been paid.`, instruction: "Focus on specific, measurable remedies.", activity: "INDEPENDENT TASK: Draft a formal grievance for Jordan Smith regarding a promotion denial.", icon: "fa-feather-pointed" },
+            { id: 5, title: "Day 5: Equality Principle", script: `Normally, you are a subordinate. But on approved Union time, you are the **Legal Equal** of management under 5 U.S.C. 71. The **Equality Principle** allows "Robust Speech." You can disagree without "Insubordination." Set the tone: "We meet as equals under the Statute." If management pulls rank, remind them: "In this room, there are no bosses."`, instruction: "Equality Principle dissolves the hierarchy during Union time.", activity: "INDEPENDENT TASK: Write a customized 'Equality Declaration' for a grievance meeting.", icon: "fa-balance-scale" },
+            { id: 6, title: "Day 6: Info Requests (7114)", script: `Management has the data. To bridge the gap, use **5 U.S.C. § 7114(b)(4)**—the "Magic Key." The law mandates management **must** provide information that is "normally maintained" and "necessary and relevant" for your duties. **Particularized Need Standard**: Explain What, Why, and How. Privacy Act? Demand **Sanitized** data.`, instruction: "Requests must be surgical.", activity: "INDEPENDENT TASK: Draft a formal 7114(b)(4) information request for the Jordan Smith case.", icon: "fa-file-invoice" },
+            { id: 7, title: "Day 7: Arbitration Committee", script: `Arbitration is a federal trial. Costs thousands. We have a **Duty of Fair Representation (DFR)**. You are the **Litigation Manager**. Pitch your case: 1. **Clear Violation**, 2. **Strong Evidence**, 3. **Winable Remedy**. If you cannot summarize in 60 seconds, you don't understand the case well enough yet.`, instruction: "Assess 'Litigation Value.'", activity: "INDEPENDENT TASK: Write a 'Case Merit Summary' for Jordan Smith.", icon: "fa-users" },
+            { id: 8, title: "Day 8: Evidence Binder", script: `Organization is **Advocacy**. Build the Evidence Binder. Strategic Indexing: 1. **The Timeline** (Oldest top), 2. **The CBA** (Article cited), 3. **The Exhibits** (Union Exhibit 1...). Organized binders often lead to **Settlement**. Management sees you are prepared to win and offers a deal to avoid trial.`, instruction: "Organization IS advocacy.", activity: "INDEPENDENT TASK: Create a Table of Contents for an Evidence Binder.", icon: "fa-folder-open" },
+            { id: 9, title: "Day 9: Trial Script (IRAC)", script: `Use **IRAC**: Issue, Rule, Application, Conclusion. Hook the Judge immediately: "Mr. Arbitrator, this is a case about a broken promise." Every sentence you speak at trial must lead back to your **RemEDY**. If it doesn't help you win back-pay or restoration, it is a waste of time.`, instruction: "Use the IRAC method.", activity: "INDEPENDENT TASK: Write a 5-sentence Opening Statement using IRAC logic.", icon: "fa-gavel" },
+            { id: 10, title: "Day 10: Mock Trial & Graduation", script: `Final hurdle. Rule: **Ask only Leading Questions**. "Mr. Miller, you reviewed Jordan June 1st, didn't you?" "And you told him he was doing a great job, correct?" Never ask "Why." Stick to facts in your binder. Congratulations, Representative. **Solidarity Forever.**`, instruction: "Ask only leading questions.", activity: "GRADUATION TASK: Conduct the Mock Trial for Jordan Smith. Ask 10 'Yes/No' questions.", icon: "fa-award" }
+        ];
+
+        // --- CORE FUNCTIONS (Explicitly bound to window) ---
+
+        window.formatGeneratedText = function(text) {
+            if (!text) return "";
+            let formatted = text.trim().replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/^\s*[-*]\s+(.*)$/gm, '<li>$1</li>').replace(/(<li>.*<\/li>(?:\s*<li>.*<\/li>)*)/gms, '<ul>$1</ul>');
+            return formatted.split(/\n\s*\n/).map(p => (p.startsWith('<ul') || p.startsWith('<h')) ? p : `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+        };
+
+        window.switchMode = function(m) {
+            const ids = ['academy-view', 'field-kit-view', 'ai-guide-view', 'resources-view', 'setup-view', 'certificate-view', 'report-display-view'];
+            ids.forEach(id => { const el = document.getElementById(id); if(el) el.classList.add('hidden'); });
+            document.querySelectorAll('header nav button').forEach(b => { b.className = "px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all text-slate-400 hover:text-white"; });
+            const target = document.getElementById(m + '-view');
+            if(target) target.classList.remove('hidden');
+            const targetBtn = document.getElementById('mode-' + (m === 'report-display' ? 'field-kit' : m));
+            if(targetBtn) targetBtn.className = "px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-lg";
+        };
+
+        window.toggleMobileSidebar = function(show) {
+            const sb = document.getElementById('mobile-sidebar');
+            const ov = document.getElementById('mobile-sidebar-overlay');
+            if (show) { sb.classList.remove('-translate-x-full'); ov.classList.remove('pointer-events-none', 'opacity-0'); ov.classList.add('opacity-100'); }
+            else { sb.classList.add('-translate-x-full'); ov.classList.remove('pointer-events-none', 'opacity-0'); ov.classList.remove('opacity-100'); }
+        };
+
+        window.showWelcomeScreen = function() {
+            const c = document.getElementById('image-container');
+            if (!c) return;
+            if (!activeCustomKey) {
+                c.innerHTML = `<div class="text-center max-w-lg px-8 animate-slide-up flex flex-col items-center text-white text-center"><div class="w-20 h-20 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 border border-blue-500/20 text-white font-bold text-white"><i class="fa-solid fa-user-lock text-3xl"></i></div><h2 class="text-xl lg:text-2xl font-black mb-3 uppercase tracking-tighter text-white text-center">Activation Required</h2><p class="text-slate-300 text-xs mb-6 text-center italic leading-relaxed">"Security key required to activate AI Chief Steward consultation tools."</p><button onclick="window.switchMode('setup')" class="px-8 py-3 bg-blue-600 rounded-full text-xs font-black uppercase text-white font-bold">Go to Setup</button></div>`;
+            } else {
+                c.innerHTML = `<div class="text-center max-w-lg px-8 animate-slide-up flex flex-col items-center text-white text-center text-white text-white"><div class="w-32 h-32 bg-amber-500/10 rounded-full flex items-center justify-center mb-6 border-4 border-amber-500/20 shadow-2xl text-6xl text-white"><i class="fa-solid fa-graduation-cap"></i></div><h2 class="text-xl lg:text-2xl font-black mb-2 uppercase tracking-tighter text-center">Academy Online</h2><p class="text-slate-300 text-sm font-medium italic text-center">"Welcome back, Steward. Authentication successful."</p></div>`;
+            }
+        };
+
+        window.selectLesson = function(index) {
+            activeIndexState = index;
+            const l = lessons[index];
+            visitedLessons.add(l.id);
+            saveProgressToFirestore();
+            updateSidebarStyles();
+            window.switchMode('academy');
+            document.getElementById('master-play-btn').style.display = 'flex';
+            
+            // CLEAR PREVIOUS CHALLENGE UI
+            document.getElementById('ai-challenge-container').classList.add('hidden');
+            document.getElementById('ai-challenge-box').innerHTML = "";
+            document.getElementById('activity-content-container').classList.remove('hidden');
+
+            const ic = document.getElementById('image-container');
+            ic.innerHTML = `<div class="w-full h-full animate-slide-up">${staticVisuals[l.id] || ''}</div>`;
+
+            if(activeCustomKey) generateLessonVisual(l.title);
+
+            document.getElementById('steward-instruction').innerHTML = `<p>${l.instruction}</p>${l.visualSnippet || ''}`;
+            document.getElementById('hands-on-activity').innerHTML = `<p>${l.activity}</p>`;
+            document.getElementById('live-transcript').innerText = "Module loaded. Press Play.";
+            document.getElementById('scenario-btn').classList.remove('hidden');
+            document.getElementById('summary-btn').classList.remove('hidden');
+            document.getElementById('claim-cert-btn').classList.toggle('hidden', index !== 9);
+            document.getElementById('peer-review-section').classList.remove('hidden');
+            
+            clearFeedback(); updateProgress();
+        };
+
+        window.restoreActivityUI = function() {
+            document.getElementById('ai-challenge-container').classList.add('hidden');
+            document.getElementById('activity-content-container').classList.remove('hidden');
+        };
+
+        window.playCurrentLesson = async function() {
+            if (activeIndexState === -1) return;
+            const transcript = document.getElementById('live-transcript');
+            const parts = lessons[activeIndexState].script.split('. ');
+            transcript.innerHTML = parts.map(p => `<p class="mb-4 text-center leading-relaxed text-white">${p}.</p>`).join('');
+        };
+
+        // --- AI API LOGIC ---
+
+        async function fetchGemini(payload, retries = 5, delay = 1000) {
+            const key = activeCustomKey || "";
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${key}`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                    });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const data = await res.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text;
+                } catch (err) {
+                    if (i === retries - 1) throw err;
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        async function generateLessonVisual(title) {
+            const key = activeCustomKey || "";
+            try {
+                const prompt = `A professional digital illustration for: "${title}". Style: clean, modern, dark-blue and gold, labor union theme.`;
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${key}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ instances: [{ prompt: prompt }], parameters: { sampleCount: 1 } })
+                });
+                const data = await res.json();
+                const imageUrl = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
+                document.getElementById('image-container').innerHTML = `<img src="${imageUrl}" class="w-full h-full object-cover animate-slide-up" alt="${title}">`;
+            } catch (e) {}
+        }
+
+        window.generateSummary = async function() {
+            if (activeIndexState === -1) return;
+            const btn = document.getElementById('summary-btn');
+            const lt = document.getElementById('live-transcript');
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analysing...`;
+            try {
+                const res = await fetchGemini({ contents: [{ parts: [{ text: `Summarize this union training lecture into 5 actionable tactical bullet points for a union steward: "${lessons[activeIndexState].script}"` }] }] });
+                lt.innerHTML = `<div class="bg-blue-600/10 p-6 rounded-2xl border border-blue-500/30 text-left mb-6 animate-slide-up text-white text-center"><h4 class="text-blue-400 font-black uppercase text-xs mb-4"> Tactical Cheat Sheet</h4><div class="prose-content text-sm text-blue-100">${window.formatGeneratedText(res)}</div></div><button onclick="window.playCurrentLesson()" class="text-xs text-slate-400 underline uppercase font-bold text-center w-full block">Return</button>`;
+            } catch(e) { lt.innerHTML = "Error. Check API Key."; }
+            finally { btn.disabled = false; btn.innerHTML = ` Get Tactical Cheat Sheet`; }
+        };
+
+        window.generatePracticeScenario = async function(forceNew = false) {
+            const box = document.getElementById('ai-challenge-box');
+            const container = document.getElementById('ai-challenge-container');
+            const btn = document.getElementById('scenario-btn');
+            const logBox = document.getElementById('challenge-log-box');
+
+            if (activeIndexState === -1) return;
+            const lessonKey = activeIndexState + 1;
+            
+            // Build Cumulative Instructions
+            let cumulativeContext = "Include elements from these training areas: ";
+            for(let i=0; i < lessonKey; i++) {
+                cumulativeContext += lessons[i].title + (i < lessonKey - 1 ? ", " : ".");
+            }
+
+            if (localScenarioCache[lessonKey] && !forceNew) {
+                document.getElementById('activity-content-container').classList.add('hidden');
+                container.classList.remove('hidden');
+                box.innerHTML = window.formatGeneratedText(localScenarioCache[lessonKey]);
+                return;
+            }
+
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Creating...`;
+            document.getElementById('activity-content-container').classList.add('hidden');
+            container.classList.remove('hidden');
+            box.innerHTML = "<p class='animate-pulse text-center py-4 text-amber-500 italic'>Simulating complex SSA scenario...</p>";
+            
+            try {
+                const prompt = `Act as an expert Labor Relations Consultant. Generate a complex, realistic SSA labor relations grievance scenario for a trainee.
+                CURRENT LESSON: ${lessons[activeIndexState].title}.
+                CUMULATIVE CHALLENGE: ${cumulativeContext}
+                The scenario MUST require the user to use knowledge from ALL mentioned days. Include management dialogue and specific contract pitfalls.`;
+                
+                const res = await fetchGemini({ contents: [{ parts: [{ text: prompt }] }] });
+                localScenarioCache[lessonKey] = res;
+                box.innerHTML = window.formatGeneratedText(res);
+                
+                // Update Log Box
+                logBox.innerHTML = `<div class="text-[10px] text-blue-300 font-black uppercase mb-1">Last Case (Day ${lessonKey})</div>` + window.formatGeneratedText(res);
+            } catch(e) { box.innerHTML = "Error. Check Security Key."; }
+            finally { btn.disabled = false; btn.innerHTML = ` Generate AI Case Challenge`; }
+        };
+
+        window.getAIFeedback = async function() {
+            const text = document.getElementById('activity-input').value.trim(); if(!text || activeIndexState === -1) return;
+            const btn = document.getElementById('review-btn');
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analyzing...`;
+            document.getElementById('ai-feedback-container').classList.remove('hidden');
+            try {
+                const res = await fetchGemini({ contents: [{ parts: [{ text: `Review work for task: "${lessons[activeIndexState].activity}". Answer: "${text}". Provide critique based on the National Contract.` }] }] });
+                document.getElementById('ai-feedback-box').innerHTML = window.formatGeneratedText(res);
+            } catch(e) { document.getElementById('ai-feedback-box').innerHTML = "Error."; }
+            finally { btn.disabled = false; btn.innerHTML = ` Get AI Feedback`; }
+        };
+
+        window.generateGrievanceHelp = async function() {
+            const input = document.getElementById('grievance-input').value.trim();
+            const output = document.getElementById('grievance-output');
+            const btn = document.getElementById('case-analyze-btn');
+            if (!input) return;
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analyzing...`;
+            output.classList.remove('hidden'); output.innerHTML = "<p class='animate-pulse italic text-amber-500 text-center py-4'>Scanning...</p>";
+            try {
+                const res = await fetchGemini({ contents: [{ parts: [{ text: `Analyze SSA incident: "${input}". Cite Articles.` }] }] });
+                output.innerHTML = window.formatGeneratedText(res);
+                localCaseHistory.unshift({ timestamp: new Date().toLocaleString(), query: input.substring(0, 50) + "...", fullQuery: input, result: res });
+                renderHistory();
+            } catch (e) { output.innerText = "Error."; }
+            finally { btn.disabled = false; btn.innerHTML = ` Analyze Case`; }
+        };
+
+        window.generateFullReport = async function() {
+            const input = document.getElementById('grievance-input').value.trim();
+            if (!input) return;
+            const btn = document.getElementById('case-report-btn');
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Compiling...`;
+            try {
+                const prompt = `Act as an expert AFGE Chief Steward. Generate strategic Case Strategy Report for: "${input}". Include ROADMAP and REMEDY sections.`;
+                const res = await fetchGemini({ contents: [{ parts: [{ text: prompt }] }] });
+                document.getElementById('report-content').innerHTML = window.formatGeneratedText(res);
+                window.switchMode('report-display');
+            } catch (e) { console.error("Report Error:", e); }
+            finally { btn.disabled = false; btn.innerHTML = ` Generate Strategic Case Report`; }
+        };
+
+        window.sendChatMessage = async function() {
+            const inputEl = document.getElementById('chat-input');
+            const btn = document.getElementById('chat-send-btn');
+            const msg = inputEl.value.trim(); if(!msg || !btn) return;
+            const container = document.getElementById('chat-messages');
+            container.innerHTML += `<div class="chat-bubble-user p-4 max-w-[85%] text-xs ml-auto animate-slide-up text-white">${msg}</div>`;
+            inputEl.value = ""; btn.disabled = true;
+            try {
+                const systemPrompt = currentChatMode === "roleplay" ? "Roleplay as a difficult manager." : "Advice as a Chief Steward.";
+                const res = await fetchGemini({ contents: [{ parts: [{ text: `${systemPrompt} User says: ${msg}` }] }] });
+                const aiBubble = document.createElement('div');
+                aiBubble.className = "chat-bubble-ai p-5 max-w-[85%] text-sm animate-slide-up prose-content text-white";
+                aiBubble.innerHTML = window.formatGeneratedText(res); container.appendChild(aiBubble);
+            } catch (e) { container.innerHTML += `<div class="text-red-400 p-2 text-xs">Error.</div>`; }
+            finally { btn.disabled = false; container.scrollTop = container.scrollHeight; }
+        };
+
+        // --- HELPERS ---
+        window.setChatMode = function(mode) {
+            currentChatMode = mode;
+            document.getElementById('mode-consult').className = mode === "consult" ? "w-full text-left p-3 rounded-xl bg-blue-500/20 text-blue-300 font-bold text-xs border border-blue-500/30" : "w-full text-left p-3 rounded-xl bg-slate-800 text-slate-400 font-bold text-xs border border-transparent";
+            document.getElementById('mode-roleplay').className = mode === "roleplay" ? "w-full text-left p-3 rounded-xl bg-blue-500/20 text-blue-300 font-bold text-xs border border-blue-500/30" : "w-full text-left p-3 rounded-xl bg-slate-800 text-slate-400 font-bold text-xs border border-transparent";
+        };
+
+        window.resetFieldKit = function() { document.getElementById('grievance-input').value = ""; document.getElementById('grievance-output').innerHTML = ""; document.getElementById('grievance-output').classList.add('hidden'); };
+        window.clearChat = function() { document.getElementById('chat-messages').innerHTML = ""; };
+        window.clearFeedback = function() { document.getElementById('ai-feedback-container').classList.add('hidden'); };
+
+        function updateSidebarStyles() {
+            const buttons = document.querySelectorAll('#nav-week-1 button, #nav-week-2 button');
+            buttons.forEach((b, i) => {
+                const id = lessons[i].id;
+                let c = `w-full text-left p-3 lg:p-3.5 rounded-xl text-[10px] lg:text-xs font-semibold transition-all border border-transparent hover:bg-white/5 `;
+                if (activeIndexState === i) b.className = c + "active-nav-item shadow-lg";
+                else if (visitedLessons.has(id)) b.className = c + "visited-nav-item";
+                else b.className = c + "text-slate-400";
+            });
+        }
+        function updateProgress() {
+            const bar = document.getElementById('progress-bar');
+            const txt = document.getElementById('progress-text');
+            const perc = activeIndexState === -1 ? 0 : ((activeIndexState + 1) / lessons.length) * 100;
+            if(bar) bar.style.width = perc + '%';
+            if(txt) txt.innerText = activeIndexState === -1 ? `Initiation` : `Day ${activeIndexState+1} of 10`;
+        }
+
+        window.saveUserKeyUI = async function() {
+            const val = document.getElementById('user-api-key').value.trim();
+            if (!val || !user) return;
+            activeCustomKey = val;
+            try { await setDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true }); alert("Key Saved."); window.showWelcomeScreen(); window.switchMode('academy'); } catch(e) {}
+        };
+        async function saveProgressToFirestore() { if(user) try { await setDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) }); } catch(e) {} }
+        function renderHistory() {
+            const c = document.getElementById('history-list'); if (!c) return;
+            c.innerHTML = localCaseHistory.slice(0,20).map((item, idx) => `<div onclick="window.loadHistoryItem(${idx})" class="history-card text-white"><div class="text-[8px] font-black uppercase mb-1 text-white">${item.timestamp}</div><div class="text-[10px] truncate text-white">${item.query}</div></div>`).join('');
+        }
+        window.loadHistoryItem = function(idx) {
+            const item = localCaseHistory[idx];
+            document.getElementById('grievance-input').value = item.fullQuery;
+            const out = document.getElementById('grievance-output');
+            out.classList.remove('hidden'); out.innerHTML = window.formatGeneratedText(item.result);
+        };
+
+        // --- INIT ---
+        async function init() {
+            const initAuthFlow = async () => {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            };
+            await initAuthFlow();
+
+            onAuthStateChanged(auth, async (u) => {
+                if (!u) return;
+                user = u;
+                const profileSnap = await getDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'profile'));
+                if (profileSnap.exists()) {
+                    activeCustomKey = profileSnap.data().apiKey;
+                    const ki = document.getElementById('user-api-key');
+                    if(ki) ki.value = activeCustomKey;
+                }
+                const progSnap = await getDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'progress'));
+                if (progSnap.exists()) visitedLessons = new Set(progSnap.data().visited);
+
+                const w1 = document.getElementById('nav-week-1');
+                const w2 = document.getElementById('nav-week-2');
+                w1.innerHTML = ""; w2.innerHTML = "";
+                lessons.forEach((l, i) => {
+                    const btn = document.createElement('button');
+                    btn.onclick = () => window.selectLesson(i);
+                    btn.innerHTML = `<i class="fa-solid ${l.icon} mr-3 opacity-40"></i> Day ${l.id}`;
+                    if (l.id <= 5) w1.appendChild(btn); else w2.appendChild(btn);
+                });
+                updateSidebarStyles(); window.showWelcomeScreen(); updateProgress();
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
