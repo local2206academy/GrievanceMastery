@@ -402,9 +402,9 @@
                 <div class="glass-panel p-8 rounded-[2rem] border border-blue-500/20 flex flex-col gap-6 text-left text-white">
                     <div class="space-y-6">
                         <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-2">Database Persistence</h3>
+                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-2">GitHub Pages Mode</h3>
                             <p class="text-xs text-slate-400 leading-relaxed">
-                                This course is anchored to a unique, permanent identifier. Your progress and API keys are stored securely in a dedicated cloud bucket. This ensures this specific course remains functional regardless of your other projects.
+                                You are running this course on GitHub. To enable the AI Chief Steward, Case Reports, and Tactical Rebuttals, paste your Gemini API key below. This key will be saved for your current browser session.
                             </p>
                         </div>
 
@@ -421,14 +421,14 @@
                                 </li>
                                 <li class="flex gap-4">
                                     <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">3</span>
-                                    <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>. Your key will be synced to your cloud profile.</div>
+                                    <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>.</div>
                                 </li>
                             </ol>
                         </div>
                     </div>
                     <div class="pt-6 border-t border-white/5 text-white">
                         <input type="password" id="user-api-key" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-amber-500 outline-none text-white text-white" placeholder="Paste Gemini API Key here...">
-                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900 shadow-lg hover:scale-[1.02] transition-transform">Save Configuration & Sync</button>
+                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900 shadow-lg hover:scale-[1.02] transition-transform">Save Locally & Activate AI</button>
                     </div>
                 </div>
             </div>
@@ -503,6 +503,7 @@
         import { getFirestore, doc, setDoc, getDoc, collection } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
         // --- GLOBAL STATE ---
+        const apiKey = ""; 
         let activeCustomKey = "";
         let activeIndexState = -1;
         let localScenarioCache = {};
@@ -679,6 +680,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             document.getElementById('peer-review-section').classList.remove('hidden');
             
             clearFeedback(); updateProgress();
+            window.toggleMobileSidebar(false);
         };
 
         window.restoreActivityUI = function() {
@@ -688,15 +690,15 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
 
         window.playCurrentLesson = async function() {
             if (activeIndexState === -1) return;
-            const transcript = document.getElementById('live-transcript');
-            const parts = lessons[activeIndexState].script.split('. ');
-            transcript.innerHTML = parts.map(p => `<p class="mb-4 text-center leading-relaxed text-white">${p}.</p>`).join('');
+            document.getElementById('live-transcript-container').scrollIntoView({ behavior: 'smooth' });
         };
 
         // --- AI API LOGIC ---
 
         async function fetchGemini(payload, retries = 5, delay = 1000) {
-            const key = activeCustomKey || "";
+            const key = activeCustomKey || apiKey;
+            if (!key) throw new Error("Security Key not activated. Go to Setup.");
+            
             for (let i = 0; i < retries; i++) {
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${key}`, {
@@ -714,7 +716,8 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
         }
 
         async function generateLessonVisual(title) {
-            const key = activeCustomKey || "";
+            const key = activeCustomKey || apiKey;
+            if (!key) return;
             try {
                 const prompt = `A professional digital illustration for: "${title}". Style: clean, modern, dark-blue and gold, labor union theme.`;
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${key}`, {
@@ -734,8 +737,8 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Analysing...`;
             try {
                 const res = await fetchGemini({ contents: [{ parts: [{ text: `Summarize this union training lecture into 5 actionable tactical bullet points for a union steward: "${lessons[activeIndexState].script}"` }] }] });
-                lt.innerHTML = `<div class="bg-blue-600/10 p-6 rounded-2xl border border-blue-500/30 text-left mb-6 animate-slide-up text-white text-center"><h4 class="text-blue-400 font-black uppercase text-xs mb-4"> Tactical Cheat Sheet</h4><div class="prose-content text-sm text-blue-100">${window.formatGeneratedText(res)}</div></div><button onclick="window.playCurrentLesson()" class="text-xs text-slate-400 underline uppercase font-bold text-center w-full block">Return</button>`;
-            } catch(e) { lt.innerHTML = "Error. Check API Key."; }
+                lt.innerHTML = `<div class="bg-blue-600/10 p-6 rounded-2xl border border-blue-500/30 text-left mb-6 animate-slide-up text-white text-center"><h4 class="text-blue-400 font-black uppercase text-xs mb-4"> Tactical Cheat Sheet</h4><div class="prose-content text-sm text-blue-100">${window.formatGeneratedText(res)}</div></div><button onclick="window.selectLesson(activeIndexState)" class="text-xs text-slate-400 underline uppercase font-bold text-center w-full block">Return to Lesson</button>`;
+            } catch(e) { lt.innerHTML = "Error activating AI. Ensure key is set in Setup."; }
             finally { btn.disabled = false; btn.innerHTML = ` Get Tactical Cheat Sheet`; }
         };
 
@@ -748,7 +751,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             if (activeIndexState === -1) return;
             const lessonKey = activeIndexState + 1;
             
-            // Build Cumulative Instructions
             let cumulativeContext = "Include elements from these training areas: ";
             for(let i=0; i < lessonKey; i++) {
                 cumulativeContext += lessons[i].title + (i < lessonKey - 1 ? ", " : ".");
@@ -776,9 +778,8 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 localScenarioCache[lessonKey] = res;
                 box.innerHTML = window.formatGeneratedText(res);
                 
-                // Update Log Box
                 logBox.innerHTML = `<div class="text-[10px] text-blue-300 font-black uppercase mb-1">Last Case (Day ${lessonKey})</div>` + window.formatGeneratedText(res);
-            } catch(e) { box.innerHTML = "Error. Check Security Key."; }
+            } catch(e) { box.innerHTML = "Error activating AI. Ensure key is set in Setup."; }
             finally { btn.disabled = false; btn.innerHTML = ` Generate AI Case Challenge`; }
         };
 
@@ -790,8 +791,8 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             try {
                 const res = await fetchGemini({ contents: [{ parts: [{ text: `Review work for task: "${lessons[activeIndexState].activity}". Answer: "${text}". Provide critique based on the National Contract.` }] }] });
                 document.getElementById('ai-feedback-box').innerHTML = window.formatGeneratedText(res);
-            } catch(e) { document.getElementById('ai-feedback-box').innerHTML = "Error."; }
-            finally { btn.disabled = false; btn.innerHTML = ` Get AI Feedback`; }
+            } catch(e) { document.getElementById('ai-feedback-box').innerHTML = "Error analyzing your answer. Key check recommended."; }
+            finally { btn.disabled = false; btn.innerHTML = ` Get AI Chief Steward Feedback`; }
         };
 
         window.generateGrievanceHelp = async function() {
@@ -806,14 +807,14 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 output.innerHTML = window.formatGeneratedText(res);
                 localCaseHistory.unshift({ timestamp: new Date().toLocaleString(), query: input.substring(0, 50) + "...", fullQuery: input, result: res });
                 renderHistory();
-            } catch (e) { output.innerText = "Error."; }
+            } catch (e) { output.innerText = "Error activating AI."; }
             finally { btn.disabled = false; btn.innerHTML = ` Analyze Case`; }
         };
 
         window.generateFullReport = async function() {
             const input = document.getElementById('grievance-input').value.trim();
-            if (!input) return;
             const btn = document.getElementById('case-report-btn');
+            if (!input) return;
             btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Compiling...`;
             try {
                 const prompt = `Act as an expert AFGE Chief Steward. Generate strategic Case Strategy Report for: "${input}". Include ROADMAP and REMEDY sections.`;
@@ -822,6 +823,20 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 window.switchMode('report-display');
             } catch (e) { console.error("Report Error:", e); }
             finally { btn.disabled = false; btn.innerHTML = ` Generate Strategic Case Report`; }
+        };
+
+        window.generateRebuttals = async function() {
+            const input = document.getElementById('grievance-input').value.trim();
+            const output = document.getElementById('grievance-output');
+            const btn = document.getElementById('case-rebuttal-btn');
+            if (!input) return;
+            btn.disabled = true; btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Strategizing...`;
+            output.classList.remove('hidden');
+            try {
+                const res = await fetchGemini({ contents: [{ parts: [{ text: `Generate 3 surgical tactical rebuttals for SSA incident: "${input}"` }] }] });
+                output.innerHTML = `<div class="bg-blue-600/10 p-6 rounded-2xl border border-blue-500/30 text-white mb-6 animate-slide-up"><h4 class="text-blue-400 font-black uppercase text-xs mb-4"> Tactical Case Rebuttals</h4><div class="prose-content text-sm text-blue-100">${window.formatGeneratedText(res)}</div></div>`;
+            } catch (e) { output.innerText = "Error activating AI."; }
+            finally { btn.disabled = false; btn.innerHTML = ` Generate Tactical Rebuttals`; }
         };
 
         window.sendChatMessage = async function() {
@@ -837,7 +852,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 const aiBubble = document.createElement('div');
                 aiBubble.className = "chat-bubble-ai p-5 max-w-[85%] text-sm animate-slide-up prose-content text-white";
                 aiBubble.innerHTML = window.formatGeneratedText(res); container.appendChild(aiBubble);
-            } catch (e) { container.innerHTML += `<div class="text-red-400 p-2 text-xs">Error.</div>`; }
+            } catch (e) { container.innerHTML += `<div class="text-red-400 p-2 text-xs">Error activating AI.</div>`; }
             finally { btn.disabled = false; container.scrollTop = container.scrollHeight; }
         };
 
@@ -855,7 +870,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
         function updateSidebarStyles() {
             const buttons = document.querySelectorAll('#nav-week-1 button, #nav-week-2 button');
             buttons.forEach((b, i) => {
-                const id = lessons[i].id;
+                const id = (lessons[i] && lessons[i].id) ? lessons[i].id : (i+1);
                 let c = `w-full text-left p-3 lg:p-3.5 rounded-xl text-[10px] lg:text-xs font-semibold transition-all border border-transparent hover:bg-white/5 `;
                 if (activeIndexState === i) b.className = c + "active-nav-item shadow-lg";
                 else if (visitedLessons.has(id)) b.className = c + "visited-nav-item";
@@ -870,20 +885,37 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             if(txt) txt.innerText = activeIndexState === -1 ? `Initiation` : `Day ${activeIndexState+1} of 10`;
         }
 
-        // AUTO COURSE IDENTIFIER LOGIC
-        // Using a safe, environment-aware identifier check.
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'grievance-mastery-default-afge-2206';
-
         window.saveUserKeyUI = async function() {
             const val = document.getElementById('user-api-key').value.trim();
-            if (!val || !user) return;
-            activeCustomKey = val;
-            try { await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true }); alert("Key Saved."); window.showWelcomeScreen(); window.switchMode('academy'); } catch(e) {}
+            if (!val) return;
+            
+            // Set locally first so it works immediately on GitHub
+            activeCustomKey = val; 
+            
+            if (db && user) {
+                try {
+                    await setDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true });
+                } catch (e) {
+                    console.error("Firebase sync failed, key activated locally for this session.");
+                }
+            }
+            
+            window.showWelcomeScreen();
+            window.switchMode('academy');
+            alert("Security Key Activated for this session.");
         };
-        async function saveProgressToFirestore() { if(user) try { await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) }); } catch(e) {} }
+
+        async function saveProgressToFirestore() {
+            if (db && user) {
+                try {
+                    await setDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) });
+                } catch (e) {}
+            }
+        }
+
         function renderHistory() {
             const c = document.getElementById('history-list'); if (!c) return;
-            c.innerHTML = localCaseHistory.slice(0,20).map((item, idx) => `<div onclick="window.loadHistoryItem(${idx})" class="history-card text-white"><div class="text-[8px] font-black uppercase mb-1 text-white">${item.timestamp}</div><div class="text-[10px] truncate text-white">${item.query}</div></div>`).join('');
+            c.innerHTML = localCaseHistory.slice(0,20).map((item, idx) => `<div onclick="window.loadHistoryItem(${item})" class="history-card text-white"><div class="text-[8px] font-black uppercase mb-1 text-white">${item.timestamp}</div><div class="text-[10px] truncate text-white">${item.query}</div></div>`).join('');
         }
         window.loadHistoryItem = function(idx) {
             const item = localCaseHistory[idx];
@@ -897,55 +929,55 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             const initAuthFlow = async () => {
                 const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
                 if (!config) {
-                    console.warn("Firebase configuration not found. Running in offline/GitHub mode.");
+                    console.log("Static Environment Detected. Cloud sync bypassed.");
                     return;
                 }
 
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
+                try {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                } catch (err) {
+                    console.error("Auth failed:", err);
                 }
             };
+            
             await initAuthFlow();
 
             if (auth) {
                 onAuthStateChanged(auth, async (u) => {
-                    if (!u) return;
-                    user = u;
-                    const profileSnap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profile'));
-                    if (profileSnap.exists()) {
-                        activeCustomKey = profileSnap.data().apiKey;
-                        const ki = document.getElementById('user-api-key');
-                        if(ki) ki.value = activeCustomKey;
+                    if (u) {
+                        user = u;
+                        const profileSnap = await getDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'profile'));
+                        if (profileSnap.exists()) {
+                            activeCustomKey = profileSnap.data().apiKey;
+                            const ki = document.getElementById('user-api-key');
+                            if(ki) ki.value = activeCustomKey;
+                        }
+                        const progSnap = await getDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'progress'));
+                        if (progSnap.exists()) visitedLessons = new Set(progSnap.data().visited);
                     }
-                    const progSnap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'progress'));
-                    if (progSnap.exists()) visitedLessons = new Set(progSnap.data().visited);
-
-                    const w1 = document.getElementById('nav-week-1');
-                    const w2 = document.getElementById('nav-week-2');
-                    w1.innerHTML = ""; w2.innerHTML = "";
-                    lessons.forEach((l, i) => {
-                        const btn = document.createElement('button');
-                        btn.onclick = () => window.selectLesson(i);
-                        btn.innerHTML = `<i class="fa-solid ${l.icon} mr-3 opacity-40"></i> Day ${l.id}`;
-                        if (l.id <= 5) w1.appendChild(btn); else w2.appendChild(btn);
-                    });
-                    updateSidebarStyles(); window.showWelcomeScreen(); updateProgress();
+                    renderUI();
                 });
             } else {
-                // Manual rendering for environments without Firebase configuration (like GitHub)
-                const w1 = document.getElementById('nav-week-1');
-                const w2 = document.getElementById('nav-week-2');
-                w1.innerHTML = ""; w2.innerHTML = "";
-                lessons.forEach((l, i) => {
-                    const btn = document.createElement('button');
-                    btn.onclick = () => window.selectLesson(i);
-                    btn.innerHTML = `<i class="fa-solid ${l.icon} mr-3 opacity-40"></i> Day ${l.id}`;
-                    if (l.id <= 5) w1.appendChild(btn); else w2.appendChild(btn);
-                });
-                updateSidebarStyles(); window.showWelcomeScreen(); updateProgress();
+                renderUI();
             }
+        }
+
+        function renderUI() {
+            const w1 = document.getElementById('nav-week-1');
+            const w2 = document.getElementById('nav-week-2');
+            if(!w1 || !w2) return;
+            w1.innerHTML = ""; w2.innerHTML = "";
+            lessons.forEach((l, i) => {
+                const btn = document.createElement('button');
+                btn.onclick = () => window.selectLesson(i);
+                btn.innerHTML = `<i class="fa-solid ${l.icon} mr-3 opacity-40"></i> Day ${l.id}`;
+                if (l.id <= 5) w1.appendChild(btn); else w2.appendChild(btn);
+            });
+            updateSidebarStyles(); window.showWelcomeScreen(); updateProgress();
         }
 
         init();
