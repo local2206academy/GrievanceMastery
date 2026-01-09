@@ -511,8 +511,13 @@
         let currentChatMode = "consult";
         let user = null;
 
+        // FIXED PERMANENT UNIQUE IDENTIFIER
+        const COURSE_ID = "grievance-mastery-afge-2206-permanent-v1";
+
         // --- FIREBASE VARS ---
+        // GitHub specific guard: check if environment variables exist before parsing
         const firebaseConfigRaw = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : COURSE_ID;
         
         let appInstance, auth, db;
         if (firebaseConfigRaw) {
@@ -522,6 +527,19 @@
         }
 
         // --- DATA DEFS ---
+        const staticVisuals = {
+            1: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="50" y="50" width="300" height="200" fill="white" rx="10" opacity="0.05"/><path d="M100 150 L200 80 L300 150 L200 220 Z" fill="#f59e0b" opacity="0.6"/><circle cx="200" cy="150" r="40" fill="none" stroke="#f59e0b" stroke-width="2"/><text x="200" y="270" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="18">STRATEGIC ROADMAP</text><path d="M190 150 H210 M200 140 V160" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>`,
+            2: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><circle cx="180" cy="130" r="70" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="8 4"/><path d="M230 180 L290 240" stroke="#3b82f6" stroke-width="12" stroke-linecap="round"/><rect x="150" y="100" width="60" height="60" fill="white" opacity="0.1"/><text x="200" y="280" text-anchor="middle" fill="#3b82f6" font-weight="bold" font-size="18">EVIDENCE INVESTIGATION</text></svg>`,
+            3: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M200 50 L100 100 V180 C100 230 200 270 200 270 C200 270 300 230 300 180 V100 L200 50Z" fill="#f59e0b" opacity="0.7"/><path d="M170 160 L195 185 L240 135" stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="200" y="295" text-anchor="middle" fill="white" font-size="14">THE WEINGARTEN SHIELD</text></svg>`,
+            4: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="120" y="40" width="160" height="220" fill="white" rx="5" opacity="0.8"/><rect x="140" y="70" width="120" height="8" fill="#e2e8f0"/><rect x="140" y="100" width="120" height="8" fill="#e2e8f0"/><rect x="140" y="130" width="80" height="8" fill="#f59e0b"/><path d="M260 210 L210 260 L190 250 L240 200 Z" fill="#475569"/><text x="200" y="290" text-anchor="middle" fill="white" font-size="16">GRIEVANCE DRAFTING</text></svg>`,
+            5: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><circle cx="150" cy="150" r="50" fill="#3b82f6" opacity="0.6"/><circle cx="250" cy="150" r="50" fill="#f59e0b" opacity="0.6"/><path d="M150 150 H250" stroke="white" stroke-width="2" stroke-dasharray="5 5"/><text x="200" y="270" text-anchor="middle" fill="white" font-weight="bold" font-size="20">LEGAL EQUALITY</text></svg>`,
+            6: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="100" y="80" width="200" height="120" rx="10" fill="none" stroke="white" stroke-width="4"/><path d="M120 110 H280 M120 140 H280 M120 170 H200" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><text x="200" y="260" text-anchor="middle" fill="white" font-size="18">7114 DATA REQUEST</text></svg>`,
+            7: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M80 220 H320 L280 260 H120 Z" fill="#475569"/><rect x="185" y="100" width="30" height="120" fill="#f59e0b"/><rect x="140" y="80" width="120" height="40" rx="8" fill="#f59e0b"/><text x="200" y="50" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="20">ARBITRATION PANEL</text></svg>`,
+            8: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="120" y="50" width="160" height="220" rx="10" fill="#3b82f6"/><rect x="105" y="70" width="30" height="40" rx="5" fill="#f59e0b"/><rect x="105" y="130" width="30" height="40" rx="5" fill="#f59e0b"/><rect x="105" y="190" width="30" height="40" rx="5" fill="#f59e0b"/><text x="200" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="24">THE BINDER</text></svg>`,
+            9: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="60" y="80" width="280" height="140" rx="20" fill="none" stroke="#f59e0b" stroke-width="5"/><path d="M100 120 H300 M100 150 H300 M100 180 H200" stroke="#f59e0b" stroke-width="3"/><text x="200" y="270" text-anchor="middle" fill="white" font-size="20">IRAC LOGIC MAP</text></svg>`,
+            10: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M200 60 L320 130 L200 200 L80 130 Z" fill="#f59e0b"/><path d="M320 130 V200" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><rect x="180" y="200" width="40" height="60" fill="#3b82f6"/><text x="200" y="45" text-anchor="middle" fill="white" font-weight="bold" font-size="24">CERTIFIED STEWARD</text></svg>`
+        };
+
         const lessons = [
             { id: 1, title: "Day 1: Roadmap (Union 101)", script: `Welcome, Representative. Today you begin your journey as a defender of federal employees. You are no longer just an employee; you are an Officer of AFGE Local 2206. Your authority is not a gift from management; it is anchored in **5 U.S.C. Chapter 71**, also known as "The Statute." 
 
@@ -600,19 +618,6 @@ Never ask "Why?" or "How?" Those questions give the manager a chance to explain 
 
 You are now a Steward. You are the barrier between a worker and an unfair agency. You are the voice for the person who is afraid to speak. Remember: **Solidarity is not just a word; it is a legal and moral commitment.** Congratulations, Representative. Welcome to Local 2206. Solidarity Forever.`, instruction: "Ask only leading questions.", activity: "GRADUATION TASK: Conduct the Mock Trial for Jordan Smith. Ask 10 'Yes/No' questions.", icon: "fa-award" }
         ];
-
-        const staticVisuals = {
-            1: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="50" y="50" width="300" height="200" fill="white" rx="10" opacity="0.05"/><path d="M100 150 L200 80 L300 150 L200 220 Z" fill="#f59e0b" opacity="0.6"/><circle cx="200" cy="150" r="40" fill="none" stroke="#f59e0b" stroke-width="2"/><text x="200" y="270" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="18">STRATEGIC ROADMAP</text><path d="M190 150 H210 M200 140 V160" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>`,
-            2: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><circle cx="180" cy="130" r="70" fill="none" stroke="#3b82f6" stroke-width="4" stroke-dasharray="8 4"/><path d="M230 180 L290 240" stroke="#3b82f6" stroke-width="12" stroke-linecap="round"/><rect x="150" y="100" width="60" height="60" fill="white" opacity="0.1"/><text x="200" y="280" text-anchor="middle" fill="#3b82f6" font-weight="bold" font-size="18">EVIDENCE INVESTIGATION</text></svg>`,
-            3: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M200 50 L100 100 V180 C100 230 200 270 200 270 C200 270 300 230 300 180 V100 L200 50Z" fill="#f59e0b" opacity="0.7"/><path d="M170 160 L195 185 L240 135" stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><text x="200" y="295" text-anchor="middle" fill="white" font-size="14">THE WEINGARTEN SHIELD</text></svg>`,
-            4: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="120" y="40" width="160" height="220" fill="white" rx="5" opacity="0.8"/><rect x="140" y="70" width="120" height="8" fill="#e2e8f0"/><rect x="140" y="100" width="120" height="8" fill="#e2e8f0"/><rect x="140" y="130" width="80" height="8" fill="#f59e0b"/><path d="M260 210 L210 260 L190 250 L240 200 Z" fill="#475569"/><text x="200" y="290" text-anchor="middle" fill="white" font-size="16">GRIEVANCE DRAFTING</text></svg>`,
-            5: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><circle cx="150" cy="150" r="50" fill="#3b82f6" opacity="0.6"/><circle cx="250" cy="150" r="50" fill="#f59e0b" opacity="0.6"/><path d="M150 150 H250" stroke="white" stroke-width="2" stroke-dasharray="5 5"/><text x="200" y="270" text-anchor="middle" fill="white" font-weight="bold" font-size="20">LEGAL EQUALITY</text></svg>`,
-            6: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="100" y="80" width="200" height="120" rx="10" fill="none" stroke="white" stroke-width="4"/><path d="M120 110 H280 M120 140 H280 M120 170 H200" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><text x="200" y="260" text-anchor="middle" fill="white" font-size="18">7114 DATA REQUEST</text></svg>`,
-            7: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M80 220 H320 L280 260 H120 Z" fill="#475569"/><rect x="185" y="100" width="30" height="120" fill="#f59e0b"/><rect x="140" y="80" width="120" height="40" rx="8" fill="#f59e0b"/><text x="200" y="50" text-anchor="middle" fill="#f59e0b" font-weight="bold" font-size="20">ARBITRATION PANEL</text></svg>`,
-            8: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="120" y="50" width="160" height="220" rx="10" fill="#3b82f6"/><rect x="105" y="70" width="30" height="40" rx="5" fill="#f59e0b"/><rect x="105" y="130" width="30" height="40" rx="5" fill="#f59e0b"/><rect x="105" y="190" width="30" height="40" rx="5" fill="#f59e0b"/><text x="200" y="160" text-anchor="middle" fill="white" font-weight="bold" font-size="24">THE BINDER</text></svg>`,
-            9: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><rect x="60" y="80" width="280" height="140" rx="20" fill="none" stroke="#f59e0b" stroke-width="5"/><path d="M100 120 H300 M100 150 H300 M100 180 H200" stroke="#f59e0b" stroke-width="3"/><text x="200" y="270" text-anchor="middle" fill="white" font-size="20">IRAC LOGIC MAP</text></svg>`,
-            10: `<svg viewBox="0 0 400 300" class="w-full h-full"><rect width="400" height="300" fill="#020617"/><path d="M200 60 L320 130 L200 200 L80 130 Z" fill="#f59e0b"/><path d="M320 130 V200" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/><rect x="180" y="200" width="40" height="60" fill="#3b82f6"/><text x="200" y="45" text-anchor="middle" fill="white" font-weight="bold" font-size="24">CERTIFIED STEWARD</text></svg>`
-        };
 
         // --- CORE FUNCTIONS (Explicitly bound to window) ---
 
@@ -747,7 +752,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
 
             if (activeIndexState === -1) return;
             const lessonKey = activeIndexState + 1;
-            
+           
             // Build Cumulative Instructions
             let cumulativeContext = "Include elements from these training areas: ";
             for(let i=0; i < lessonKey; i++) {
@@ -765,17 +770,17 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             document.getElementById('activity-content-container').classList.add('hidden');
             container.classList.remove('hidden');
             box.innerHTML = "<p class='animate-pulse text-center py-4 text-amber-500 italic'>Simulating complex SSA scenario...</p>";
-            
+           
             try {
                 const prompt = `Act as an expert Labor Relations Consultant. Generate a complex, realistic SSA labor relations grievance scenario for a trainee.
                 CURRENT LESSON: ${lessons[activeIndexState].title}.
                 CUMULATIVE CHALLENGE: ${cumulativeContext}
                 The scenario MUST require the user to use knowledge from ALL mentioned days. Include management dialogue and specific contract pitfalls.`;
-                
+               
                 const res = await fetchGemini({ contents: [{ parts: [{ text: prompt }] }] });
                 localScenarioCache[lessonKey] = res;
                 box.innerHTML = window.formatGeneratedText(res);
-                
+               
                 // Update Log Box
                 logBox.innerHTML = `<div class="text-[10px] text-blue-300 font-black uppercase mb-1">Last Case (Day ${lessonKey})</div>` + window.formatGeneratedText(res);
             } catch(e) { box.innerHTML = "Error. Check Security Key."; }
@@ -870,17 +875,16 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             if(txt) txt.innerText = activeIndexState === -1 ? `Initiation` : `Day ${activeIndexState+1} of 10`;
         }
 
-        // AUTO COURSE IDENTIFIER LOGIC
-        // Using a safe, environment-aware identifier check.
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'grievance-mastery-default-afge-2206';
+        // PERMANENT UNIQUE IDENTIFIER
+        const COURSE_ID = "grievance-mastery-afge-2206-permanent-v1";
 
         window.saveUserKeyUI = async function() {
             const val = document.getElementById('user-api-key').value.trim();
-            if (!val || !user) return;
+            if (!user) return;
             activeCustomKey = val;
-            try { await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true }); alert("Key Saved."); window.showWelcomeScreen(); window.switchMode('academy'); } catch(e) {}
+            try { await setDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true }); alert("Key Saved."); window.showWelcomeScreen(); window.switchMode('academy'); } catch(e) {}
         };
-        async function saveProgressToFirestore() { if(user) try { await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) }); } catch(e) {} }
+        async function saveProgressToFirestore() { if(user) try { await setDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) }); } catch(e) {} }
         function renderHistory() {
             const c = document.getElementById('history-list'); if (!c) return;
             c.innerHTML = localCaseHistory.slice(0,20).map((item, idx) => `<div onclick="window.loadHistoryItem(${idx})" class="history-card text-white"><div class="text-[8px] font-black uppercase mb-1 text-white">${item.timestamp}</div><div class="text-[10px] truncate text-white">${item.query}</div></div>`).join('');
@@ -897,7 +901,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             const initAuthFlow = async () => {
                 const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
                 if (!config) {
-                    console.warn("Firebase configuration not found. Running in offline/GitHub mode.");
+                    console.log("Static Environment Detected (GitHub). Skipping cloud initialization.");
                     return;
                 }
 
@@ -913,13 +917,13 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 onAuthStateChanged(auth, async (u) => {
                     if (!u) return;
                     user = u;
-                    const profileSnap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profile'));
+                    const profileSnap = await getDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'profile'));
                     if (profileSnap.exists()) {
                         activeCustomKey = profileSnap.data().apiKey;
                         const ki = document.getElementById('user-api-key');
                         if(ki) ki.value = activeCustomKey;
                     }
-                    const progSnap = await getDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'progress'));
+                    const progSnap = await getDoc(doc(db, 'artifacts', COURSE_ID, 'users', user.uid, 'settings', 'progress'));
                     if (progSnap.exists()) visitedLessons = new Set(progSnap.data().visited);
 
                     const w1 = document.getElementById('nav-week-1');
@@ -934,7 +938,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                     updateSidebarStyles(); window.showWelcomeScreen(); updateProgress();
                 });
             } else {
-                // Manual rendering for environments without Firebase configuration (like GitHub)
+                // If running without Firebase (GitHub Pages), render syllabus manually
                 const w1 = document.getElementById('nav-week-1');
                 const w2 = document.getElementById('nav-week-2');
                 w1.innerHTML = ""; w2.innerHTML = "";
