@@ -400,35 +400,26 @@
             <div id="setup-view" class="hidden flex flex-col gap-6 animate-slide-up max-w-4xl mx-auto w-full p-4 text-white text-center text-white">
                 <h2 class="text-3xl lg:text-4xl font-black text-white text-center text-white">AI <span class="text-amber-500 text-white font-bold">Configuration</span></h2>
                 <div class="glass-panel p-8 rounded-[2rem] border border-blue-500/20 flex flex-col gap-6 text-left text-white">
-                    <div class="space-y-6">
-                        <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-2">Database Persistence</h3>
-                            <p class="text-xs text-slate-400 leading-relaxed">
-                                This course is anchored to a unique, permanent identifier. Your progress and API keys are stored securely in a dedicated cloud bucket. This ensures this specific course remains functional regardless of your other projects.
-                            </p>
-                        </div>
-
-                        <div>
-                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-4">Step-by-Step Activation Guide</h3>
-                            <ol class="space-y-4 text-xs lg:text-sm text-slate-300">
-                                <li class="flex gap-4">
-                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">1</span>
-                                    <div>Visit the <strong><a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 underline hover:text-blue-300">Google AI Studio API Key Manager</a></strong>.</div>
-                                </li>
-                                <li class="flex gap-4">
-                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">2</span>
-                                    <div>Click "Create API key in new project" (or use an existing one) and copy the generated string.</div>
-                                </li>
-                                <li class="flex gap-4">
-                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">3</span>
-                                    <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>. Your key will be synced to your cloud profile.</div>
-                                </li>
-                            </ol>
-                        </div>
+                    <div>
+                        <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-4">Step-by-Step Activation Guide</h3>
+                        <ol class="space-y-4 text-xs lg:text-sm text-slate-300">
+                            <li class="flex gap-4">
+                                <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">1</span>
+                                <div>Visit the <strong><a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 underline hover:text-blue-300">Google AI Studio API Key Manager</a></strong>.</div>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">2</span>
+                                <div>Click "Create API key in new project" (or use an existing one) and copy the generated string.</div>
+                            </li>
+                            <li class="flex gap-4">
+                                <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">3</span>
+                                <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>. Your key will be synced to your cloud profile.</div>
+                            </li>
+                        </ol>
                     </div>
                     <div class="pt-6 border-t border-white/5 text-white">
                         <input type="password" id="user-api-key" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-amber-500 outline-none text-white text-white" placeholder="Paste Gemini API Key here...">
-                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900 shadow-lg hover:scale-[1.02] transition-transform">Save Configuration & Sync</button>
+                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900">Save Locally & Activate AI</button>
                     </div>
                 </div>
             </div>
@@ -511,11 +502,9 @@
         let currentChatMode = "consult";
         let user = null;
 
-        // PERMANENT UNIQUE IDENTIFIER (Defined only once here)
-        const COURSE_ID = "grievance-mastery-afge-2206-permanent-v1";
-
         // --- FIREBASE VARS ---
         const firebaseConfigRaw = JSON.parse(__firebase_config);
+        const appIdGlobal = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const appInstance = initializeApp(firebaseConfigRaw);
         const auth = getAuth(appInstance);
         const db = getFirestore(appInstance);
@@ -535,16 +524,82 @@
         };
 
         const lessons = [
-            { id: 1, title: "Day 1: Roadmap (Union 101)", script: `Welcome to Day 1. You are an Officer of the Union. Your power is anchored in **5 U.S.C. Chapter 71**, known as the Statute. Collective bargaining is in the public interest. Under **Section 7131**, you have a right to **Official Time**—this is a federal entitlement. The **AFGE SSA National Contract** is the "Supreme Law of the Shop." Management policy cannot override it. Focus on **Article 1 (Recognition)**, **Article 3 (Union Rights)**, and **Duty of Fair Representation (DFR)**. Literacy is defense.`, instruction: "The Contract is superior to internal Agency manuals. Master Article 1 and 3 immediately.", activity: "INDEPENDENT TASK: Open the National Contract. 1. Find the Signature Page. 2. Locate Article 31, Section 3. 3. Locate Article 4, Section 1.", icon: "fa-map-marked-alt" },
-            { id: 2, title: "Day 2: Investigation (Detective)", script: `Evidence wins grievances. Under **5 U.S.C. § 7103(a)(9)**, a grievance is a complaint relating to employment. You need a **Contractual Hook**. Master the **15-Day Hard Wall** in **Article 24, Section 7**. Initiate within 15 working days or lose the case. Management tactics: "talking it out" until Day 16. Strategy: **5 W's**, **Documentary preservation**, and identifying **Disparate Treatment**. If it's not in writing, it didn't happen.`, instruction: "Stress that Article 24 timelines are jurisdictional.", activity: "INDEPENDENT TASK: Categorize workplace scenarios. Cite Article numbers.", icon: "fa-search" },
-            { id: 3, title: "Day 3: Intake (Listening)", script: `Today, you become the Shield. Master **Weingarten Rights (Article 4, Section 2)**. Codified at **7114(a)(2)(B)**. Weingarten is **NOT** automatic. Three-Prong Test: 1. Investigatory meeting? 2. Reasonable Belief? 3. Request made? You have the right to clarify questions, caucus, and advise. If a meeting is "instructional" but management asks "Why?", it is an investigation. Stop it immediately.`, instruction: "Recognize the difference between 'Instruction' and 'Investigation'.", activity: "INDEPENDENT TASK: Write out the Weingarten invocation script. List 3 signs meeting has become investigative.", icon: "fa-shield-halved" },
-            { id: 4, title: "Day 4: Drafting (Secret Wording)", script: `Drafting is legal pleading. Tactical Strategy: The **Global Clause**. Conclude with: "Management violated Article [X], Section [Y], **and any and all other relevant Articles, Laws, or Regulations.**" Remedy - **Made Whole**. Use the **Back Pay Act (5 U.S.C. 5596)**. To win back pay, prove: 1. Unjustified action, 2. Pay withdrawal, 3. "But for" the action, they'd have been paid.`, instruction: "Focus on specific, measurable remedies.", activity: "INDEPENDENT TASK: Draft a formal grievance for Jordan Smith regarding a promotion denial.", icon: "fa-feather-pointed" },
-            { id: 5, title: "Day 5: Equality Principle", script: `Normally, you are a subordinate. But on approved Union time, you are the **Legal Equal** of management under 5 U.S.C. 71. The **Equality Principle** allows "Robust Speech." You can disagree without "Insubordination." Set the tone: "We meet as equals under the Statute." If management pulls rank, remind them: "In this room, there are no bosses."`, instruction: "Equality Principle dissolves the hierarchy during Union time.", activity: "INDEPENDENT TASK: Write a customized 'Equality Declaration' for a grievance meeting.", icon: "fa-balance-scale" },
-            { id: 6, title: "Day 6: Info Requests (7114)", script: `Management has the data. To bridge the gap, use **5 U.S.C. § 7114(b)(4)**—the "Magic Key." The law mandates management **must** provide information that is "normally maintained" and "necessary and relevant" for your duties. **Particularized Need Standard**: Explain What, Why, and How. Privacy Act? Demand **Sanitized** data.`, instruction: "Requests must be surgical.", activity: "INDEPENDENT TASK: Draft a formal 7114(b)(4) information request for the Jordan Smith case.", icon: "fa-file-invoice" },
-            { id: 7, title: "Day 7: Arbitration Committee", script: `Arbitration is a federal trial. Costs thousands. We have a **Duty of Fair Representation (DFR)**. You are the **Litigation Manager**. Pitch your case: 1. **Clear Violation**, 2. **Strong Evidence**, 3. **Winable Remedy**. If you cannot summarize in 60 seconds, you don't understand the case well enough yet.`, instruction: "Assess 'Litigation Value.'", activity: "INDEPENDENT TASK: Write a 'Case Merit Summary' for Jordan Smith.", icon: "fa-users" },
-            { id: 8, title: "Day 8: Evidence Binder", script: `Organization is **Advocacy**. Build the Evidence Binder. Strategic Indexing: 1. **The Timeline** (Oldest top), 2. **The CBA** (Article cited), 3. **The Exhibits** (Union Exhibit 1...). Organized binders often lead to **Settlement**. Management sees you are prepared to win and offers a deal to avoid trial.`, instruction: "Organization IS advocacy.", activity: "INDEPENDENT TASK: Create a Table of Contents for an Evidence Binder.", icon: "fa-folder-open" },
-            { id: 9, title: "Day 9: Trial Script (IRAC)", script: `Use **IRAC**: Issue, Rule, Application, Conclusion. Hook the Judge immediately: "Mr. Arbitrator, this is a case about a broken promise." Every sentence you speak at trial must lead back to your **RemEDY**. If it doesn't help you win back-pay or restoration, it is a waste of time.`, instruction: "Use the IRAC method.", activity: "INDEPENDENT TASK: Write a 5-sentence Opening Statement using IRAC logic.", icon: "fa-gavel" },
-            { id: 10, title: "Day 10: Mock Trial & Graduation", script: `Final hurdle. Rule: **Ask only Leading Questions**. "Mr. Miller, you reviewed Jordan June 1st, didn't you?" "And you told him he was doing a great job, correct?" Never ask "Why." Stick to facts in your binder. Congratulations, Representative. **Solidarity Forever.**`, instruction: "Ask only leading questions.", activity: "GRADUATION TASK: Conduct the Mock Trial for Jordan Smith. Ask 10 'Yes/No' questions.", icon: "fa-award" }
+            { id: 1, title: "Day 1: Roadmap (Union 101)", script: `Welcome, Representative. Today you begin your journey as a defender of federal employees. You are no longer just an employee; you are an Officer of AFGE Local 2206. Your authority is not a gift from management; it is anchored in **5 U.S.C. Chapter 71**, also known as "The Statute." 
+
+Congress has declared that collective bargaining is in the public interest because it contributes to the effective conduct of public business. Under **Section 7131**, you are entitled to **Official Time** to represent employees—this is a federal right. 
+
+The most important tool in your arsenal is the **AFGE-SSA National Contract**. In this shop, that contract is the "Supreme Law." Agency manuals like POMS or the Administrative Manual cannot override the negotiated agreement. You must immediately master **Article 1 (Recognition)**, which defines who we represent, and **Article 3 (Union Rights)**, which defines your protections. Remember your **Duty of Fair Representation (DFR)**: you must represent every member of the bargaining unit fairly, regardless of whether they pay dues. Literacy is your only true defense.`, instruction: "The Contract is superior to internal Agency manuals. Master Article 1 and 3 immediately.", activity: "INDEPENDENT TASK: Open the National Contract. 1. Find the Signature Page. 2. Locate Article 31, Section 3. 3. Locate Article 4, Section 1.", icon: "fa-map-marked-alt" },
+            { id: 2, title: "Day 2: Investigation (Detective)", script: `Evidence wins cases, not emotions. Under **5 U.S.C. § 7103(a)(9)**, a "grievance" is broadly defined as any complaint relating to the employment of an employee. To win, you need a **Contractual Hook**—a specific Article or Law that management has violated. 
+
+The most dangerous pitfall for a new steward is the **15-Day Hard Wall** found in **Article 24, Section 7**. You have exactly 15 working days from the date of the incident (or the date the employee became aware of it) to initiate a grievance. If you file on Day 16, management will win on a technicality without ever discussing the facts. 
+
+Management often uses "stalling tactics," suggesting you "just talk it out" informally for weeks. This is a trap to bleed your 15-day clock. Your strategy must be the **5 W's**: Who was involved? What happened? When did it happen? Where did it happen? and Why is it a violation? If you don't have it in writing, it didn't happen. Start your paper trail immediately.`, instruction: "Stress that Article 24 timelines are jurisdictional.", activity: "INDEPENDENT TASK: Categorize workplace scenarios. Cite Article numbers.", icon: "fa-search" },
+            { id: 3, title: "Day 3: Intake (Listening)", script: `Today, you learn to be the Shield. You must master **Weingarten Rights**, which are negotiated in **Article 4, Section 2** and codified in federal law at **7114(a)(2)(B)**. 
+
+A common misconception is that Weingarten is automatic. It is **NOT**. The employee must explicitly request representation. As a steward, your job is to educate them: "If management asks you a question that could lead to discipline, stop and ask for a Union Rep."
+
+The **Three-Prong Test** for Weingarten:
+1. Is it an investigatory meeting?
+2. Does the employee have a reasonable belief that discipline may result?
+3. Has the employee requested representation?
+
+During the meeting, you are not a "silent observer." You have the right to clarify confusing questions, the right to **caucus** (take the employee into a private room to talk), and the right to advise the employee on how to answer. If a supervisor claims a meeting is just "instructional" but then asks "Why did you do that?", it has become an investigation. Stop the meeting immediately.`, instruction: "Recognize the difference between 'Instruction' and 'Investigation'.", activity: "INDEPENDENT TASK: Write out the Weingarten invocation script. List 3 signs meeting has become investigative.", icon: "fa-shield-halved" },
+            { id: 4, title: "Day 4: Drafting (Secret Wording)", script: `Drafting a grievance is like writing a legal pleading. You must be precise but inclusive. A critical tactical strategy is the **Global Clause**. Never just cite one section. Always conclude your grievance with: "Management violated Article [X], Section [Y], **and any and all other relevant Articles, Laws, or Regulations.**" This allows you to add evidence later if you discover more violations during the process.
+
+When drafting the **Remedy**, you must demand the employee be **"Made Whole."** This is a legal term meaning the employee should be put back in the position they would have been in if the violation never occurred. 
+
+If money is involved, you must cite the **Back Pay Act (5 U.S.C. 5596)**. To win back pay, you must prove three things:
+1. An unjustified or unwarranted personnel action occurred.
+2. It resulted in the withdrawal or reduction of pay/allowances.
+3. "But for" that action, the employee would have received the money. 
+Be specific: ask for the promotion, the expungement of the record, or the restoration of the leave hours.`, instruction: "Focus on specific, measurable remedies.", activity: "INDEPENDENT TASK: Draft a formal grievance for Jordan Smith regarding a promotion denial.", icon: "fa-feather-pointed" },
+            { id: 5, title: "Day 5: Equality Principle", script: `This is the most empowering lesson you will learn. Normally, in the federal workplace, there is a strict hierarchy: supervisor and subordinate. However, the moment you are on approved Union time, you are the **Legal Equal** of management under 5 U.S.C. 71. 
+
+This is the **Equality Principle**. It exists because the law recognizes that you cannot effectively represent an employee if you are afraid of being fired for disagreeing with the boss. The law allows for **"Robust Speech."** You can raise your voice, you can be firm, and you can point out management's failures without it being considered "Insubordination." 
+
+However, there is a limit: you cannot engage in "flagrant misconduct" (physical threats or racial slurs). Set the tone at the start of every meeting: "Mr. Supervisor, we meet today as equals under the Statute to resolve this dispute." If they try to pull rank, calmly remind them that in this room, there are no bosses—only representatives of the Agency and the Union.`, instruction: "Equality Principle dissolves the hierarchy during Union time.", activity: "INDEPENDENT TASK: Write a customized 'Equality Declaration' for a grievance meeting.", icon: "fa-balance-scale" },
+            { id: 6, title: "Day 6: Info Requests (7114)", script: `Management holds all the cards—the emails, the logs, and the personnel files. To bridge this gap, you must use **5 U.S.C. § 7114(b)(4)**—the "Magic Key" of labor relations. 
+
+The law mandates that management **must** provide information that is "normally maintained" and "necessary and relevant" for the Union to perform its representational duties. You do not have to wait for management to offer it; you demand it.
+
+To win an information request, you must meet the **Particularized Need Standard**. You must explain:
+1. **What** information you need.
+2. **Why** you need it.
+3. **How** it relates to the grievance you are investigating.
+
+If management claims the **Privacy Act** prevents them from giving you data about other employees (to prove disparate treatment), do not back down. Demand that the data be **"Sanitized"**—meaning they strip the names and social security numbers but provide the raw data. Information is power; don't let them hide the evidence.`, instruction: "Requests must be surgical.", activity: "INDEPENDENT TASK: Draft a formal 7114(b)(4) information request for the Jordan Smith case.", icon: "fa-file-invoice" },
+            { id: 7, title: "Day 7: Arbitration Committee", script: `Not every grievance can be won, and not every grievance should go to trial. Arbitration is a formal federal proceeding that costs the Local thousands of dollars in legal and arbitrator fees. 
+
+As a steward, you are a **Litigation Manager**. When you bring a case to the Arbitration Committee, you must "pitch" its merits. You must demonstrate the **Duty of Fair Representation (DFR)**. This means we don't go to arbitration just because a member is "nice" or "pays dues." We go because there is a clear violation of the contract and a high probability of success.
+
+Your pitch must answer three questions:
+1. What specific contract provision was violated?
+2. What evidence do we have that proves it (not just "he said/she said")?
+3. Is there a "Winable Remedy" that an arbitrator actually has the power to grant?
+If you cannot summarize the merit of your case in 60 seconds, you haven't investigated it thoroughly enough yet.`, instruction: "Assess 'Litigation Value.'", activity: "INDEPENDENT TASK: Write a 'Case Merit Summary' for Jordan Smith.", icon: "fa-users" },
+            { id: 8, title: "Day 8: Evidence Binder", script: `In labor relations, organization **is** advocacy. If you walk into a hearing with loose papers, you have already lost the respect of the Arbitrator. You must build the **Evidence Binder**. 
+
+A professional binder is your "silent witness." It should be indexed strategically:
+1. **The Timeline:** A day-by-day account of what happened, with the oldest events at the top.
+2. **The CBA:** Every Article of the contract you cited, tabbed for quick reference.
+3. **The Exhibits:** Management's emails (Union Exhibit 1), the employee's logs (Union Exhibit 2), and the Information Request results.
+
+Often, simply showing management a perfectly organized Evidence Binder during a Step 2 meeting will trigger a **Settlement**. When management sees that you are prepared to go to trial and have the "receipts" to win, they will often offer a deal to avoid the embarrassment and cost of a lost arbitration. Preparation is the best way to avoid a fight.`, instruction: "Organization IS advocacy.", activity: "INDEPENDENT TASK: Create a Table of Contents for an Evidence Binder.", icon: "fa-folder-open" },
+            { id: 9, title: "Day 9: Trial Script (IRAC)", script: `Arbitration is a trial. To win, you must speak the language of the Judge. We use the **IRAC** method:
+**I - Issue:** What is the specific question the arbitrator must answer? (e.g., "Did the Agency violate Article 26 when it failed to promote Jordan Smith?")
+**R - Rule:** What is the Contract provision or Law that governs this issue?
+**A - Application:** How do the facts of our case fit that rule? (e.g., "The rule says seniority matters; Jordan has 10 years, the person promoted has 2.")
+**C - Conclusion:** Therefore, the Agency must be found in violation.
+
+Your **Opening Statement** is your hook. You must frame the story immediately: "Mr. Arbitrator, this is a case about a broken promise and a violation of federal law." Every sentence you speak at trial must lead back to your **Remedy**. If a piece of evidence doesn't help you win back-pay or job restoration, it is a distraction. Stay focused on the goal.`, instruction: "Use the IRAC method.", activity: "INDEPENDENT TASK: Write a 5-sentence Opening Statement using IRAC logic.", icon: "fa-gavel" },
+            { id: 10, title: "Day 10: Mock Trial & Graduation", script: `This is the final hurdle. Today you learn the art of the "attack." In a hearing, when you cross-examine a manager, there is one golden rule: **Ask only Leading Questions.**
+
+A leading question is one that contains the answer. 
+"Mr. Supervisor, you reviewed Jordan's file on June 1st, didn't you?" 
+"And you told him he was doing a great job, correct?"
+Never ask "Why?" or "How?" Those questions give the manager a chance to explain themselves and look good. You want "Yes" or "No" answers that confirm the facts in your binder. 
+
+You are now a Steward. You are the barrier between a worker and an unfair agency. You are the voice for the person who is afraid to speak. Remember: **Solidarity is not just a word; it is a legal and moral commitment.** Congratulations, Representative. Welcome to Local 2206. Solidarity Forever.`, instruction: "Ask only leading questions.", activity: "GRADUATION TASK: Conduct the Mock Trial for Jordan Smith. Ask 10 'Yes/No' questions.", icon: "fa-award" }
         ];
 
         // --- CORE FUNCTIONS (Explicitly bound to window) ---
@@ -756,6 +811,19 @@
             finally { btn.disabled = false; btn.innerHTML = ` Generate Strategic Case Report`; }
         };
 
+        window.generateRebuttal = function() {
+            const input = document.getElementById('grievance-input').value.trim();
+            if (!input) return;
+            const output = document.getElementById('grievance-output');
+            output.classList.remove('hidden');
+            fetchGemini({ contents: [{ parts: [{ text: `Generate 3 tactical rebuttals for: "${input}"` }] }] })
+                .then(res => {
+                    output.innerHTML = `<div class="bg-red-900/10 p-6 rounded-2xl border border-red-500/20 text-white"><h4 class="text-red-400 font-black uppercase text-xs mb-4"> Tactical Rebuttals</h4>${window.formatGeneratedText(res)}</div>`;
+                })
+                .catch(e => { output.innerText = "Error."; });
+        };
+        window.generateRebuttals = window.generateRebuttal;
+
         window.sendChatMessage = async function() {
             const inputEl = document.getElementById('chat-input');
             const btn = document.getElementById('chat-send-btn');
@@ -801,14 +869,13 @@
             if(bar) bar.style.width = perc + '%';
             if(txt) txt.innerText = activeIndexState === -1 ? `Initiation` : `Day ${activeIndexState+1} of 10`;
         }
-
         window.saveUserKeyUI = async function() {
             const val = document.getElementById('user-api-key').value.trim();
             if (!val || !user) return;
             activeCustomKey = val;
-            try { await setDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true }); alert("Key Saved."); window.showWelcomeScreen(); window.switchMode('academy'); } catch(e) {}
+            try { await setDoc(doc(db, 'artifacts', appIdGlobal, 'users', user.uid, 'settings', 'profile'), { apiKey: val }, { merge: true }); alert("Key Saved."); window.showWelcomeScreen(); window.switchMode('academy'); } catch(e) {}
         };
-        async function saveProgressToFirestore() { if(user) try { await setDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) }); } catch(e) {} }
+        async function saveProgressToFirestore() { if(user) try { await setDoc(doc(db, 'artifacts', appIdGlobal, 'users', user.uid, 'settings', 'progress'), { visited: Array.from(visitedLessons) }); } catch(e) {} }
         function renderHistory() {
             const c = document.getElementById('history-list'); if (!c) return;
             c.innerHTML = localCaseHistory.slice(0,20).map((item, idx) => `<div onclick="window.loadHistoryItem(${idx})" class="history-card text-white"><div class="text-[8px] font-black uppercase mb-1 text-white">${item.timestamp}</div><div class="text-[10px] truncate text-white">${item.query}</div></div>`).join('');
@@ -834,13 +901,13 @@
             onAuthStateChanged(auth, async (u) => {
                 if (!u) return;
                 user = u;
-                const profileSnap = await getDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'profile'));
+                const profileSnap = await getDoc(doc(db, 'artifacts', appIdGlobal, 'users', user.uid, 'settings', 'profile'));
                 if (profileSnap.exists()) {
                     activeCustomKey = profileSnap.data().apiKey;
                     const ki = document.getElementById('user-api-key');
                     if(ki) ki.value = activeCustomKey;
                 }
-                const progSnap = await getDoc(doc(db, 'artifacts', 'grievance-mastery-afge-2206-permanent-v1', 'users', user.uid, 'settings', 'progress'));
+                const progSnap = await getDoc(doc(db, 'artifacts', appIdGlobal, 'users', user.uid, 'settings', 'progress'));
                 if (progSnap.exists()) visitedLessons = new Set(progSnap.data().visited);
 
                 const w1 = document.getElementById('nav-week-1');
