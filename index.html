@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;800&family=Great+Vibes&family=Courier+Prime&display=swap');
-        
+       
         body {
             font-family: 'Lexend', sans-serif;
             background-color: #020617;
@@ -66,7 +66,7 @@
         }
 
         #master-play-btn { display: none; }
-        
+       
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -75,7 +75,7 @@
         .prose-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
         .prose-content li { margin-bottom: 0.5rem; color: #94a3b8; }
         .prose-content h3 { color: #f59e0b; font-weight: 800; margin-top: 1.5rem; margin-bottom: 0.75rem; text-transform: uppercase; font-size: 0.85rem; border-bottom: 1px solid rgba(245, 158, 11, 0.2); padding-bottom: 4px; }
-        
+       
         .doc-snippet {
             font-family: 'Courier Prime', monospace;
             background: #ffffff;
@@ -174,7 +174,7 @@
                 <i class="fa-solid fa-bars-staggered text-xl"></i>
             </button>
         </div>
-        
+       
         <div class="flex items-center overflow-x-auto w-full lg:w-auto no-scrollbar">
             <nav class="flex gap-1 bg-slate-900/50 p-1 rounded-xl border border-white/5 mx-auto lg:mx-0 min-w-max">
                 <button onclick="window.switchMode('academy')" id="mode-academy" class="px-3 lg:px-4 py-1.5 rounded-lg text-[10px] lg:text-xs font-bold transition-all bg-amber-500 text-slate-950 shadow-lg">TRAINING</button>
@@ -197,7 +197,7 @@
                     <h2 class="text-[10px] font-black text-amber-500 uppercase tracking-widest">Syllabus</h2>
                     <button onclick="window.toggleMobileSidebar(false)" class="text-slate-500"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                
+               
                 <div class="hidden lg:block text-center mb-8 border-b border-white/5 pb-4">
                     <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Course Curriculum</h2>
                     <p class="text-[11px] font-bold text-amber-500 uppercase tracking-tighter italic font-serif">Grievance Mastery: From Incident to Arbitration</p>
@@ -222,7 +222,7 @@
 
         <!-- Main Content -->
         <main id="main-scroll-container" class="flex-1 overflow-y-auto overflow-x-hidden bg-transparent p-3 lg:p-6 relative custom-scroll pb-24 text-slate-200">
-            
+           
             <!-- Academy View -->
             <div id="academy-view" class="flex flex-col gap-4 lg:gap-6 animate-slide-up max-w-7xl mx-auto w-full">
                 <div id="video-canvas" class="relative rounded-2xl lg:rounded-[2.5rem] overflow-hidden glass-panel border border-white/10 shadow-2xl flex flex-col group min-h-[450px] lg:min-h-[650px]">
@@ -524,17 +524,17 @@
         };
 
         const lessons = [
-            { id: 1, title: "Day 1: Roadmap (Union 101)", script: `Welcome, Representative. Today you begin your journey as a defender of federal employees. You are no longer just an employee; you are an Officer of AFGE Local 2206. Your authority is not a gift from management; it is anchored in **5 U.S.C. Chapter 71**, also known as "The Statute." 
+            { id: 1, title: "Day 1: Roadmap (Union 101)", script: `Welcome, Representative. Today you begin your journey as a defender of federal employees. You are no longer just an employee; you are an Officer of AFGE Local 2206. Your authority is not a gift from management; it is anchored in **5 U.S.C. Chapter 71**, also known as "The Statute."
 
-Congress has declared that collective bargaining is in the public interest because it contributes to the effective conduct of public business. Under **Section 7131**, you are entitled to **Official Time** to represent employees—this is a federal right. 
+Congress has declared that collective bargaining is in the public interest because it contributes to the effective conduct of public business. Under **Section 7131**, you are entitled to **Official Time** to represent employees—this is a federal right.
 
 The most important tool in your arsenal is the **AFGE-SSA National Contract**. In this shop, that contract is the "Supreme Law." Agency manuals like POMS or the Administrative Manual cannot override the negotiated agreement. You must immediately master **Article 1 (Recognition)**, which defines who we represent, and **Article 3 (Union Rights)**, which defines your protections. Remember your **Duty of Fair Representation (DFR)**: you must represent every member of the bargaining unit fairly, regardless of whether they pay dues. Literacy is your only true defense.`, instruction: "The Contract is superior to internal Agency manuals. Master Article 1 and 3 immediately.", activity: "INDEPENDENT TASK: Open the National Contract. 1. Find the Signature Page. 2. Locate Article 31, Section 3. 3. Locate Article 4, Section 1.", icon: "fa-map-marked-alt" },
-            { id: 2, title: "Day 2: Investigation (Detective)", script: `Evidence wins cases, not emotions. Under **5 U.S.C. § 7103(a)(9)**, a "grievance" is broadly defined as any complaint relating to the employment of an employee. To win, you need a **Contractual Hook**—a specific Article or Law that management has violated. 
+            { id: 2, title: "Day 2: Investigation (Detective)", script: `Evidence wins cases, not emotions. Under **5 U.S.C. § 7103(a)(9)**, a "grievance" is broadly defined as any complaint relating to the employment of an employee. To win, you need a **Contractual Hook**—a specific Article or Law that management has violated.
 
-The most dangerous pitfall for a new steward is the **15-Day Hard Wall** found in **Article 24, Section 7**. You have exactly 15 working days from the date of the incident (or the date the employee became aware of it) to initiate a grievance. If you file on Day 16, management will win on a technicality without ever discussing the facts. 
+The most dangerous pitfall for a new steward is the **15-Day Hard Wall** found in **Article 24, Section 7**. You have exactly 15 working days from the date of the incident (or the date the employee became aware of it) to initiate a grievance. If you file on Day 16, management will win on a technicality without ever discussing the facts.
 
 Management often uses "stalling tactics," suggesting you "just talk it out" informally for weeks. This is a trap to bleed your 15-day clock. Your strategy must be the **5 W's**: Who was involved? What happened? When did it happen? Where did it happen? and Why is it a violation? If you don't have it in writing, it didn't happen. Start your paper trail immediately.`, instruction: "Stress that Article 24 timelines are jurisdictional.", activity: "INDEPENDENT TASK: Categorize workplace scenarios. Cite Article numbers.", icon: "fa-search" },
-            { id: 3, title: "Day 3: Intake (Listening)", script: `Today, you learn to be the Shield. You must master **Weingarten Rights**, which are negotiated in **Article 4, Section 2** and codified in federal law at **7114(a)(2)(B)**. 
+            { id: 3, title: "Day 3: Intake (Listening)", script: `Today, you learn to be the Shield. You must master **Weingarten Rights**, which are negotiated in **Article 4, Section 2** and codified in federal law at **7114(a)(2)(B)**.
 
 A common misconception is that Weingarten is automatic. It is **NOT**. The employee must explicitly request representation. As a steward, your job is to educate them: "If management asks you a question that could lead to discipline, stop and ask for a Union Rep."
 
@@ -546,19 +546,19 @@ The **Three-Prong Test** for Weingarten:
 During the meeting, you are not a "silent observer." You have the right to clarify confusing questions, the right to **caucus** (take the employee into a private room to talk), and the right to advise the employee on how to answer. If a supervisor claims a meeting is just "instructional" but then asks "Why did you do that?", it has become an investigation. Stop the meeting immediately.`, instruction: "Recognize the difference between 'Instruction' and 'Investigation'.", activity: "INDEPENDENT TASK: Write out the Weingarten invocation script. List 3 signs meeting has become investigative.", icon: "fa-shield-halved" },
             { id: 4, title: "Day 4: Drafting (Secret Wording)", script: `Drafting a grievance is like writing a legal pleading. You must be precise but inclusive. A critical tactical strategy is the **Global Clause**. Never just cite one section. Always conclude your grievance with: "Management violated Article [X], Section [Y], **and any and all other relevant Articles, Laws, or Regulations.**" This allows you to add evidence later if you discover more violations during the process.
 
-When drafting the **Remedy**, you must demand the employee be **"Made Whole."** This is a legal term meaning the employee should be put back in the position they would have been in if the violation never occurred. 
+When drafting the **Remedy**, you must demand the employee be **"Made Whole."** This is a legal term meaning the employee should be put back in the position they would have been in if the violation never occurred.
 
 If money is involved, you must cite the **Back Pay Act (5 U.S.C. 5596)**. To win back pay, you must prove three things:
 1. An unjustified or unwarranted personnel action occurred.
 2. It resulted in the withdrawal or reduction of pay/allowances.
-3. "But for" that action, the employee would have received the money. 
+3. "But for" that action, the employee would have received the money.
 Be specific: ask for the promotion, the expungement of the record, or the restoration of the leave hours.`, instruction: "Focus on specific, measurable remedies.", activity: "INDEPENDENT TASK: Draft a formal grievance for Jordan Smith regarding a promotion denial.", icon: "fa-feather-pointed" },
-            { id: 5, title: "Day 5: Equality Principle", script: `This is the most empowering lesson you will learn. Normally, in the federal workplace, there is a strict hierarchy: supervisor and subordinate. However, the moment you are on approved Union time, you are the **Legal Equal** of management under 5 U.S.C. 71. 
+            { id: 5, title: "Day 5: Equality Principle", script: `This is the most empowering lesson you will learn. Normally, in the federal workplace, there is a strict hierarchy: supervisor and subordinate. However, the moment you are on approved Union time, you are the **Legal Equal** of management under 5 U.S.C. 71.
 
-This is the **Equality Principle**. It exists because the law recognizes that you cannot effectively represent an employee if you are afraid of being fired for disagreeing with the boss. The law allows for **"Robust Speech."** You can raise your voice, you can be firm, and you can point out management's failures without it being considered "Insubordination." 
+This is the **Equality Principle**. It exists because the law recognizes that you cannot effectively represent an employee if you are afraid of being fired for disagreeing with the boss. The law allows for **"Robust Speech."** You can raise your voice, you can be firm, and you can point out management's failures without it being considered "Insubordination."
 
 However, there is a limit: you cannot engage in "flagrant misconduct" (physical threats or racial slurs). Set the tone at the start of every meeting: "Mr. Supervisor, we meet today as equals under the Statute to resolve this dispute." If they try to pull rank, calmly remind them that in this room, there are no bosses—only representatives of the Agency and the Union.`, instruction: "Equality Principle dissolves the hierarchy during Union time.", activity: "INDEPENDENT TASK: Write a customized 'Equality Declaration' for a grievance meeting.", icon: "fa-balance-scale" },
-            { id: 6, title: "Day 6: Info Requests (7114)", script: `Management holds all the cards—the emails, the logs, and the personnel files. To bridge this gap, you must use **5 U.S.C. § 7114(b)(4)**—the "Magic Key" of labor relations. 
+            { id: 6, title: "Day 6: Info Requests (7114)", script: `Management holds all the cards—the emails, the logs, and the personnel files. To bridge this gap, you must use **5 U.S.C. § 7114(b)(4)**—the "Magic Key" of labor relations.
 
 The law mandates that management **must** provide information that is "normally maintained" and "necessary and relevant" for the Union to perform its representational duties. You do not have to wait for management to offer it; you demand it.
 
@@ -568,7 +568,7 @@ To win an information request, you must meet the **Particularized Need Standard*
 3. **How** it relates to the grievance you are investigating.
 
 If management claims the **Privacy Act** prevents them from giving you data about other employees (to prove disparate treatment), do not back down. Demand that the data be **"Sanitized"**—meaning they strip the names and social security numbers but provide the raw data. Information is power; don't let them hide the evidence.`, instruction: "Requests must be surgical.", activity: "INDEPENDENT TASK: Draft a formal 7114(b)(4) information request for the Jordan Smith case.", icon: "fa-file-invoice" },
-            { id: 7, title: "Day 7: Arbitration Committee", script: `Not every grievance can be won, and not every grievance should go to trial. Arbitration is a formal federal proceeding that costs the Local thousands of dollars in legal and arbitrator fees. 
+            { id: 7, title: "Day 7: Arbitration Committee", script: `Not every grievance can be won, and not every grievance should go to trial. Arbitration is a formal federal proceeding that costs the Local thousands of dollars in legal and arbitrator fees.
 
 As a steward, you are a **Litigation Manager**. When you bring a case to the Arbitration Committee, you must "pitch" its merits. You must demonstrate the **Duty of Fair Representation (DFR)**. This means we don't go to arbitration just because a member is "nice" or "pays dues." We go because there is a clear violation of the contract and a high probability of success.
 
@@ -577,7 +577,7 @@ Your pitch must answer three questions:
 2. What evidence do we have that proves it (not just "he said/she said")?
 3. Is there a "Winable Remedy" that an arbitrator actually has the power to grant?
 If you cannot summarize the merit of your case in 60 seconds, you haven't investigated it thoroughly enough yet.`, instruction: "Assess 'Litigation Value.'", activity: "INDEPENDENT TASK: Write a 'Case Merit Summary' for Jordan Smith.", icon: "fa-users" },
-            { id: 8, title: "Day 8: Evidence Binder", script: `In labor relations, organization **is** advocacy. If you walk into a hearing with loose papers, you have already lost the respect of the Arbitrator. You must build the **Evidence Binder**. 
+            { id: 8, title: "Day 8: Evidence Binder", script: `In labor relations, organization **is** advocacy. If you walk into a hearing with loose papers, you have already lost the respect of the Arbitrator. You must build the **Evidence Binder**.
 
 A professional binder is your "silent witness." It should be indexed strategically:
 1. **The Timeline:** A day-by-day account of what happened, with the oldest events at the top.
@@ -594,10 +594,10 @@ Often, simply showing management a perfectly organized Evidence Binder during a 
 Your **Opening Statement** is your hook. You must frame the story immediately: "Mr. Arbitrator, this is a case about a broken promise and a violation of federal law." Every sentence you speak at trial must lead back to your **Remedy**. If a piece of evidence doesn't help you win back-pay or job restoration, it is a distraction. Stay focused on the goal.`, instruction: "Use the IRAC method.", activity: "INDEPENDENT TASK: Write a 5-sentence Opening Statement using IRAC logic.", icon: "fa-gavel" },
             { id: 10, title: "Day 10: Mock Trial & Graduation", script: `This is the final hurdle. Today you learn the art of the "attack." In a hearing, when you cross-examine a manager, there is one golden rule: **Ask only Leading Questions.**
 
-A leading question is one that contains the answer. 
-"Mr. Supervisor, you reviewed Jordan's file on June 1st, didn't you?" 
+A leading question is one that contains the answer.
+"Mr. Supervisor, you reviewed Jordan's file on June 1st, didn't you?"
 "And you told him he was doing a great job, correct?"
-Never ask "Why?" or "How?" Those questions give the manager a chance to explain themselves and look good. You want "Yes" or "No" answers that confirm the facts in your binder. 
+Never ask "Why?" or "How?" Those questions give the manager a chance to explain themselves and look good. You want "Yes" or "No" answers that confirm the facts in your binder.
 
 You are now a Steward. You are the barrier between a worker and an unfair agency. You are the voice for the person who is afraid to speak. Remember: **Solidarity is not just a word; it is a legal and moral commitment.** Congratulations, Representative. Welcome to Local 2206. Solidarity Forever.`, instruction: "Ask only leading questions.", activity: "GRADUATION TASK: Conduct the Mock Trial for Jordan Smith. Ask 10 'Yes/No' questions.", icon: "fa-award" }
         ];
@@ -646,7 +646,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             updateSidebarStyles();
             window.switchMode('academy');
             document.getElementById('master-play-btn').style.display = 'flex';
-            
+           
             // CLEAR PREVIOUS CHALLENGE UI
             document.getElementById('ai-challenge-container').classList.add('hidden');
             document.getElementById('ai-challenge-box').innerHTML = "";
@@ -664,7 +664,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             document.getElementById('summary-btn').classList.remove('hidden');
             document.getElementById('claim-cert-btn').classList.toggle('hidden', index !== 9);
             document.getElementById('peer-review-section').classList.remove('hidden');
-            
+           
             clearFeedback(); updateProgress();
         };
 
@@ -734,7 +734,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
 
             if (activeIndexState === -1) return;
             const lessonKey = activeIndexState + 1;
-            
+           
             // Build Cumulative Instructions
             let cumulativeContext = "Include elements from these training areas: ";
             for(let i=0; i < lessonKey; i++) {
@@ -752,17 +752,17 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             document.getElementById('activity-content-container').classList.add('hidden');
             container.classList.remove('hidden');
             box.innerHTML = "<p class='animate-pulse text-center py-4 text-amber-500 italic'>Simulating complex SSA scenario...</p>";
-            
+           
             try {
                 const prompt = `Act as an expert Labor Relations Consultant. Generate a complex, realistic SSA labor relations grievance scenario for a trainee.
                 CURRENT LESSON: ${lessons[activeIndexState].title}.
                 CUMULATIVE CHALLENGE: ${cumulativeContext}
                 The scenario MUST require the user to use knowledge from ALL mentioned days. Include management dialogue and specific contract pitfalls.`;
-                
+               
                 const res = await fetchGemini({ contents: [{ parts: [{ text: prompt }] }] });
                 localScenarioCache[lessonKey] = res;
                 box.innerHTML = window.formatGeneratedText(res);
-                
+               
                 // Update Log Box
                 logBox.innerHTML = `<div class="text-[10px] text-blue-300 font-black uppercase mb-1">Last Case (Day ${lessonKey})</div>` + window.formatGeneratedText(res);
             } catch(e) { box.innerHTML = "Error. Check Security Key."; }
