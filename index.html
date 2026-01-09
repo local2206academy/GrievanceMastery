@@ -243,7 +243,7 @@
                             <button id="summary-btn" onclick="window.generateSummary()" class="text-[9px] lg:text-[10px] font-bold bg-blue-500/10 border border-blue-500/20 px-6 lg:px-8 py-2.5 rounded-full text-blue-400 hover:bg-blue-500/20 transition-all hidden uppercase tracking-widest">
                                 <i class="fa-solid fa-list-check mr-2"></i>  Get Tactical Cheat Sheet
                             </button>
-                            <button id="scenario-btn" onclick="window.generatePracticeScenario()" class="text-[9px] lg:text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 px-6 lg:px-8 py-2.5 rounded-full text-amber-500 hover:bg-amber-500/20 transition-all hidden uppercase tracking-widest">
+                            <button id="scenario-btn" onclick="window.generatePracticeScenario()" class="text-[9px] lg:text-[10px] font-bold bg-amber-500/10 border border-blue-500/20 px-6 lg:px-8 py-2.5 rounded-full text-amber-500 hover:bg-amber-500/20 transition-all hidden uppercase tracking-widest">
                                 <i class="fa-solid fa-brain mr-2"></i>  Generate AI Case Challenge
                             </button>
                             <button id="claim-cert-btn" onclick="window.switchMode('certificate')" class="text-[9px] lg:text-[10px] font-bold bg-green-500/10 border border-green-500/20 px-6 lg:px-8 py-2.5 rounded-full text-green-500 hover:bg-green-500/20 transition-all hidden uppercase tracking-widest animate-pulse"> Claim Your Certificate</button>
@@ -400,26 +400,35 @@
             <div id="setup-view" class="hidden flex flex-col gap-6 animate-slide-up max-w-4xl mx-auto w-full p-4 text-white text-center text-white">
                 <h2 class="text-3xl lg:text-4xl font-black text-white text-center text-white">AI <span class="text-amber-500 text-white font-bold">Configuration</span></h2>
                 <div class="glass-panel p-8 rounded-[2rem] border border-blue-500/20 flex flex-col gap-6 text-left text-white">
-                    <div>
-                        <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-4">Step-by-Step Activation Guide</h3>
-                        <ol class="space-y-4 text-xs lg:text-sm text-slate-300">
-                            <li class="flex gap-4">
-                                <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">1</span>
-                                <div>Visit the <strong><a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 underline hover:text-blue-300">Google AI Studio API Key Manager</a></strong>.</div>
-                            </li>
-                            <li class="flex gap-4">
-                                <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">2</span>
-                                <div>Click "Create API key in new project" (or use an existing one) and copy the generated string.</div>
-                            </li>
-                            <li class="flex gap-4">
-                                <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">3</span>
-                                <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>. Your key will be synced to your cloud profile.</div>
-                            </li>
-                        </ol>
+                    <div class="space-y-6">
+                        <div class="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl">
+                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-2">Database Persistence</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                This course is anchored to a unique, permanent identifier. Your progress and API keys are stored securely in a dedicated cloud bucket. This ensures this specific course remains functional regardless of your other projects.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-black text-blue-400 uppercase tracking-widest mb-4">Step-by-Step Activation Guide</h3>
+                            <ol class="space-y-4 text-xs lg:text-sm text-slate-300">
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">1</span>
+                                    <div>Visit the <strong><a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-400 underline hover:text-blue-300">Google AI Studio API Key Manager</a></strong>.</div>
+                                </li>
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">2</span>
+                                    <div>Click "Create API key in new project" (or use an existing one) and copy the generated string.</div>
+                                </li>
+                                <li class="flex gap-4">
+                                    <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 text-white">3</span>
+                                    <div>Paste the key into the field below and click <strong>"Save Locally & Activate AI"</strong>. Your key will be synced to your cloud profile.</div>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                     <div class="pt-6 border-t border-white/5 text-white">
                         <input type="password" id="user-api-key" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-amber-500 outline-none text-white text-white" placeholder="Paste Gemini API Key here...">
-                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900">Save Locally & Activate AI</button>
+                        <button onclick="window.saveUserKeyUI()" class="w-full py-4 bg-amber-500 text-slate-950 font-black rounded-xl uppercase mt-4 text-[10px] font-bold text-slate-900 shadow-lg hover:scale-[1.02] transition-transform">Save Configuration & Activate AI</button>
                     </div>
                 </div>
             </div>
@@ -494,7 +503,7 @@
         import { getFirestore, doc, setDoc, getDoc, collection } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
         // --- GLOBAL STATE ---
-        const apiKey = ""; 
+        const apiKey = ""; // Fixed: Added mandatory apiKey declaration
         let activeCustomKey = "";
         let activeIndexState = -1;
         let localScenarioCache = {};
@@ -503,7 +512,7 @@
         let currentChatMode = "consult";
         let user = null;
 
-        // FIXED PERMANENT UNIQUE IDENTIFIER (Defined only once here)
+        // PERMANENT UNIQUE IDENTIFIER (Defined only once here)
         const COURSE_ID = "grievance-mastery-afge-2206-permanent-v1";
 
         // --- FIREBASE VARS ---
@@ -655,7 +664,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             window.switchMode('academy');
             document.getElementById('master-play-btn').style.display = 'flex';
             
-            // CLEAR PREVIOUS CHALLENGE UI
             document.getElementById('ai-challenge-container').classList.add('hidden');
             document.getElementById('ai-challenge-box').innerHTML = "";
             document.getElementById('activity-content-container').classList.remove('hidden');
@@ -692,6 +700,8 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
 
         async function fetchGemini(payload, retries = 5, delay = 1000) {
             const key = activeCustomKey || apiKey;
+            if (!key) throw new Error("Security Key not activated. Go to Setup.");
+            
             for (let i = 0; i < retries; i++) {
                 try {
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${key}`, {
@@ -730,7 +740,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             try {
                 const res = await fetchGemini({ contents: [{ parts: [{ text: `Summarize this union training lecture into 5 actionable tactical bullet points for a union steward: "${lessons[activeIndexState].script}"` }] }] });
                 lt.innerHTML = `<div class="bg-blue-600/10 p-6 rounded-2xl border border-blue-500/30 text-left mb-6 animate-slide-up text-white text-center"><h4 class="text-blue-400 font-black uppercase text-xs mb-4"> Tactical Cheat Sheet</h4><div class="prose-content text-sm text-blue-100">${window.formatGeneratedText(res)}</div></div><button onclick="window.selectLesson(activeIndexState)" class="text-xs text-slate-400 underline uppercase font-bold text-center w-full block">Return to Lesson</button>`;
-            } catch(e) { lt.innerHTML = "Error. Check API Key."; }
+            } catch(e) { lt.innerHTML = "Error. Check Security Key."; }
             finally { btn.disabled = false; btn.innerHTML = ` Get Tactical Cheat Sheet`; }
         };
 
@@ -743,7 +753,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             if (activeIndexState === -1) return;
             const lessonKey = activeIndexState + 1;
             
-            // Build Cumulative Instructions
             let cumulativeContext = "Include elements from these training areas: ";
             for(let i=0; i < lessonKey; i++) {
                 cumulativeContext += lessons[i].title + (i < lessonKey - 1 ? ", " : ".");
@@ -771,7 +780,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 localScenarioCache[lessonKey] = res;
                 box.innerHTML = window.formatGeneratedText(res);
                 
-                // Update Log Box
                 logBox.innerHTML = `<div class="text-[10px] text-blue-300 font-black uppercase mb-1">Last Case (Day ${lessonKey})</div>` + window.formatGeneratedText(res);
             } catch(e) { box.innerHTML = "Error. Check Security Key."; }
             finally { btn.disabled = false; btn.innerHTML = ` Generate AI Case Challenge`; }
@@ -923,7 +931,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             const initAuthFlow = async () => {
                 const config = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
                 if (!config) {
-                    console.log("Static Environment Detected (GitHub). Skipping cloud sync.");
+                    console.log("Static Environment Detected (GitHub). Cloud sync bypassed.");
                     return;
                 }
 
