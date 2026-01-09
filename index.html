@@ -503,7 +503,7 @@
         import { getFirestore, doc, setDoc, getDoc, collection } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
         // --- GLOBAL STATE ---
-        const apiKey = ""; // Canvas-provided key placeholder
+        const apiKey = ""; // Canvas internal key placeholder
         let activeCustomKey = "";
         let activeIndexState = -1;
         let localScenarioCache = {};
@@ -512,7 +512,7 @@
         let currentChatMode = "consult";
         let user = null;
 
-        // PERMANENT UNIQUE IDENTIFIER
+        // PERMANENT UNIQUE IDENTIFIER (Defined only once here)
         const COURSE_ID = "grievance-mastery-afge-2206-permanent-v1";
 
         // --- FIREBASE VARS ---
@@ -664,7 +664,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             window.switchMode('academy');
             document.getElementById('master-play-btn').style.display = 'flex';
             
-            // CLEAR PREVIOUS CHALLENGE UI
             document.getElementById('ai-challenge-container').classList.add('hidden');
             document.getElementById('ai-challenge-box').innerHTML = "";
             document.getElementById('activity-content-container').classList.remove('hidden');
@@ -753,7 +752,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             if (activeIndexState === -1) return;
             const lessonKey = activeIndexState + 1;
             
-            // Build Cumulative Instructions
             let cumulativeContext = "Include elements from these training areas: ";
             for(let i=0; i < lessonKey; i++) {
                 cumulativeContext += lessons[i].title + (i < lessonKey - 1 ? ", " : ".");
@@ -781,7 +779,6 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
                 localScenarioCache[lessonKey] = res;
                 box.innerHTML = window.formatGeneratedText(res);
                 
-                // Update Log Box
                 logBox.innerHTML = `<div class="text-[10px] text-blue-300 font-black uppercase mb-1">Last Case (Day ${lessonKey})</div>` + window.formatGeneratedText(res);
             } catch(e) { box.innerHTML = "Error. Check Security Key."; }
             finally { btn.disabled = false; btn.innerHTML = ` Generate AI Case Challenge`; }
@@ -892,6 +889,7 @@ You are now a Steward. You are the barrier between a worker and an unfair agency
             
             window.showWelcomeScreen();
             window.switchMode('academy');
+            alert("Security Key Activated for this session.");
         };
 
         async function saveProgressToFirestore() {
